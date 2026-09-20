@@ -1,0 +1,6 @@
+numpy
+soundfile
+
+# whisperx is OPTIONAL. Installing it carelessly can replace your CUDA
+# PyTorch with a CPU-only build. See the README for the safe method.
+# Without it the nodes fall back to score or even timing.

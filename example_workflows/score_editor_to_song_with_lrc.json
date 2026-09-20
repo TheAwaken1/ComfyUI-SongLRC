@@ -1,0 +1,977 @@
+{
+  "id": "8d7f04d7-9f33-4e0d-9ecd-190a8b0a24ce",
+  "revision": 0,
+  "last_node_id": 11,
+  "last_link_id": 18,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "FL_YuE2_ModelLoader",
+      "pos": [
+        30,
+        120
+      ],
+      "size": [
+        300,
+        130
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "download_missing",
+          "name": "download_missing",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "download_missing"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "music_model",
+          "name": "music_model",
+          "type": "YUE2_MODEL",
+          "slot_index": 0,
+          "links": [
+            1,
+            2
+          ]
+        },
+        {
+          "localized_name": "audio_decoder",
+          "name": "audio_decoder",
+          "type": "YUE2_VAE",
+          "slot_index": 1,
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FL_YuE2_ModelLoader"
+      },
+      "widgets_values": [
+        true
+      ],
+      "color": "#16727c",
+      "bgcolor": "#4F0074"
+    },
+    {
+      "id": 2,
+      "type": "FL_YuE2_Plan",
+      "pos": [
+        1290,
+        120
+      ],
+      "size": [
+        450,
+        790
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "music_model",
+          "name": "music_model",
+          "type": "YUE2_MODEL",
+          "link": 1
+        },
+        {
+          "localized_name": "style",
+          "name": "style",
+          "type": "STRING",
+          "widget": {
+            "name": "style"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "widget": {
+            "name": "lyrics"
+          },
+          "link": 9
+        },
+        {
+          "localized_name": "planning",
+          "name": "planning",
+          "type": "COMBO",
+          "widget": {
+            "name": "planning"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "score_abc",
+          "name": "score_abc",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "score_abc"
+          },
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "composition",
+          "name": "composition",
+          "type": "YUE2_PLAN",
+          "slot_index": 0,
+          "links": [
+            3
+          ]
+        },
+        {
+          "localized_name": "score_abc",
+          "name": "score_abc",
+          "type": "STRING",
+          "slot_index": 1,
+          "links": [
+            16
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FL_YuE2_Plan"
+      },
+      "widgets_values": [
+        "Instrumental trip hop, boom bap, 88 BPM, Rhodes chords, thick drums, deep bass, flute melody, no singing, no spoken voice, no vocal samples",
+        "",
+        "full",
+        831001,
+        "fixed",
+        "",
+        ""
+      ],
+      "color": "#16727c",
+      "bgcolor": "#4F0074"
+    },
+    {
+      "id": 3,
+      "type": "FL_YuE2_Render",
+      "pos": [
+        1800,
+        120
+      ],
+      "size": [
+        340,
+        410
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "music_model",
+          "name": "music_model",
+          "type": "YUE2_MODEL",
+          "link": 2
+        },
+        {
+          "localized_name": "composition",
+          "name": "composition",
+          "type": "YUE2_PLAN",
+          "link": 3
+        },
+        {
+          "localized_name": "max_duration",
+          "name": "max_duration",
+          "type": "INT",
+          "widget": {
+            "name": "max_duration"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "acoustic_steps",
+          "name": "acoustic_steps",
+          "type": "INT",
+          "widget": {
+            "name": "acoustic_steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "temperature",
+          "name": "temperature",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "temperature"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_p",
+          "name": "top_p",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "top_p"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_k",
+          "name": "top_k",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "top_k"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "repetition_penalty",
+          "name": "repetition_penalty",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "repetition_penalty"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "guidance",
+          "name": "guidance",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "guidance"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "music_latents",
+          "name": "music_latents",
+          "type": "YUE2_LATENTS",
+          "slot_index": 0,
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FL_YuE2_Render"
+      },
+      "widgets_values": [
+        45,
+        32,
+        1,
+        0.95,
+        100,
+        1.2,
+        1,
+        ""
+      ],
+      "color": "#16727c",
+      "bgcolor": "#4F0074"
+    },
+    {
+      "id": 4,
+      "type": "FL_YuE2_Decode",
+      "pos": [
+        2200,
+        120
+      ],
+      "size": [
+        320,
+        160
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio_decoder",
+          "name": "audio_decoder",
+          "type": "YUE2_VAE",
+          "link": 4
+        },
+        {
+          "localized_name": "music_latents",
+          "name": "music_latents",
+          "type": "YUE2_LATENTS",
+          "link": 5
+        },
+        {
+          "localized_name": "tile_frames",
+          "name": "tile_frames",
+          "type": "INT",
+          "widget": {
+            "name": "tile_frames"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": [
+            6,
+            7,
+            15
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FL_YuE2_Decode"
+      },
+      "widgets_values": [
+        1024
+      ],
+      "color": "#16727c",
+      "bgcolor": "#4F0074"
+    },
+    {
+      "id": 5,
+      "type": "PreviewAudio",
+      "pos": [
+        2200,
+        340
+      ],
+      "size": [
+        320,
+        170
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 6
+        },
+        {
+          "localized_name": "audioUI",
+          "name": "audioUI",
+          "type": "AUDIO_UI",
+          "widget": {
+            "name": "audioUI"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewAudio"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 6,
+      "type": "SaveAudioAdvanced",
+      "pos": [
+        2200,
+        580
+      ],
+      "size": [
+        320,
+        136
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 7
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": 12
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audioUI",
+          "name": "audioUI",
+          "type": "AUDIO_UI",
+          "widget": {
+            "name": "audioUI"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": [
+            18
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SaveAudioAdvanced"
+      },
+      "widgets_values": [
+        "audio/YuE2/score_editor",
+        "flac"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "FL_YuE2_ScoreEditor",
+      "pos": [
+        379.00000000000006,
+        118.16666666666671
+      ],
+      "size": [
+        840,
+        1129
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "incoming_score_abc",
+          "name": "incoming_score_abc",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "localized_name": "score_abc",
+          "name": "score_abc",
+          "type": "STRING",
+          "widget": {
+            "name": "score_abc"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "score_abc",
+          "name": "score_abc",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            8
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FL_YuE2_ScoreEditor"
+      },
+      "widgets_values": [
+        "X:1\nT:\nM:4/4\nL:1/16\nQ:1/4=88\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:Am\n% verse\nV: Vocal\n\"Am7\"z16|\"Dm7\"z16|\"G7\"z16|\"Cmaj7\"z16|\nV: Ins\n=E2=A2=c4=B2=A2=G4|=F2=A2=d4=c2=A2=F4|=G2=B2=d4=c2=B2=A4|=A2=c2=e4=d2=c2=A4|\n% outro\nV: Vocal\n\"Fmaj7\"z16|\"Dm7\"z16|\"E7\"z16|\"Am7\"z16|\nV: Ins\n=F2=A2=c4=A2=G2=F4|=D2=F2=A4=G2=F2=D4|=E2^G2=B4=A2^G2=E4|=A8z8|\n",
+        "",
+        ""
+      ],
+      "color": "#16727c",
+      "bgcolor": "#4F0074"
+    },
+    {
+      "id": 8,
+      "type": "SongLyricsClean",
+      "pos": [
+        380,
+        1290
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "order": 0,
+      "title": "Lyrics Clean (type or paste lyrics here)",
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            9,
+            10
+          ]
+        },
+        {
+          "localized_name": "title",
+          "name": "title",
+          "type": "STRING",
+          "slot_index": 1,
+          "links": [
+            11
+          ]
+        }
+      ],
+      "widgets_values": [
+        "[verse]\nCold rain on the interstate\nHeadlights bleeding through the glass\n[chorus]\nHold the line tonight\n[verse]\nEvery mile is one more mile away\n[chorus]\nHold the line tonight"
+      ],
+      "properties": {
+        "Node name for S&R": "SongLyricsClean"
+      },
+      "flags": {},
+      "mode": 0
+    },
+    {
+      "id": 9,
+      "type": "SongFilename",
+      "pos": [
+        850,
+        1290
+      ],
+      "size": [
+        330,
+        110
+      ],
+      "order": 3,
+      "title": "Song Filename",
+      "inputs": [
+        {
+          "localized_name": "title",
+          "name": "title",
+          "type": "STRING",
+          "widget": {
+            "name": "title"
+          },
+          "link": 11
+        },
+        {
+          "localized_name": "folder",
+          "name": "folder",
+          "type": "STRING",
+          "widget": {
+            "name": "folder"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "shape": 7,
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            12,
+            13
+          ]
+        },
+        {
+          "localized_name": "safe_title",
+          "name": "safe_title",
+          "type": "STRING",
+          "slot_index": 1,
+          "links": [
+            14
+          ]
+        }
+      ],
+      "widgets_values": [
+        "",
+        "audio/songs"
+      ],
+      "properties": {
+        "Node name for S&R": "SongFilename"
+      },
+      "flags": {},
+      "mode": 0
+    },
+    {
+      "id": 10,
+      "type": "SongLyricsToLRC",
+      "pos": [
+        2200,
+        900
+      ],
+      "size": [
+        380,
+        320
+      ],
+      "order": 7,
+      "title": "Lyrics to LRC",
+      "inputs": [
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "widget": {
+            "name": "lyrics"
+          },
+          "link": 10
+        },
+        {
+          "localized_name": "seconds",
+          "name": "seconds",
+          "type": "FLOAT",
+          "widget": {
+            "name": "seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "shape": 7,
+          "link": 15
+        },
+        {
+          "localized_name": "structure",
+          "name": "structure",
+          "type": "STRING",
+          "widget": {
+            "name": "structure"
+          },
+          "link": 16
+        },
+        {
+          "localized_name": "title",
+          "name": "title",
+          "type": "STRING",
+          "widget": {
+            "name": "title"
+          },
+          "link": 14
+        },
+        {
+          "localized_name": "artist",
+          "name": "artist",
+          "type": "STRING",
+          "widget": {
+            "name": "artist"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "language",
+          "name": "language",
+          "type": "STRING",
+          "widget": {
+            "name": "language"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "offset_seconds",
+          "name": "offset_seconds",
+          "type": "FLOAT",
+          "widget": {
+            "name": "offset_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "timing_scale",
+          "name": "timing_scale",
+          "type": "FLOAT",
+          "widget": {
+            "name": "timing_scale"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "prefer_alignment",
+          "name": "prefer_alignment",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "prefer_alignment"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            17
+          ]
+        }
+      ],
+      "widgets_values": [
+        "",
+        0,
+        "",
+        "",
+        "",
+        "en",
+        0,
+        1,
+        true
+      ],
+      "properties": {
+        "Node name for S&R": "SongLyricsToLRC"
+      },
+      "flags": {},
+      "mode": 0
+    },
+    {
+      "id": 11,
+      "type": "SongSaveMatchingLRC",
+      "pos": [
+        2620,
+        900
+      ],
+      "size": [
+        300,
+        80
+      ],
+      "order": 8,
+      "title": "Save Matching LRC",
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 18
+        },
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "link": 17
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": null
+        }
+      ],
+      "widgets_values": [],
+      "properties": {
+        "Node name for S&R": "SongSaveMatchingLRC"
+      },
+      "flags": {},
+      "mode": 0
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "YUE2_MODEL"
+    ],
+    [
+      2,
+      1,
+      0,
+      3,
+      0,
+      "YUE2_MODEL"
+    ],
+    [
+      3,
+      2,
+      0,
+      3,
+      1,
+      "YUE2_PLAN"
+    ],
+    [
+      4,
+      1,
+      1,
+      4,
+      0,
+      "YUE2_VAE"
+    ],
+    [
+      5,
+      3,
+      0,
+      4,
+      1,
+      "YUE2_LATENTS"
+    ],
+    [
+      6,
+      4,
+      0,
+      5,
+      0,
+      "AUDIO"
+    ],
+    [
+      7,
+      4,
+      0,
+      6,
+      0,
+      "AUDIO"
+    ],
+    [
+      8,
+      7,
+      0,
+      2,
+      5,
+      "STRING"
+    ],
+    [
+      9,
+      8,
+      0,
+      2,
+      2,
+      "STRING"
+    ],
+    [
+      10,
+      8,
+      0,
+      10,
+      0,
+      "STRING"
+    ],
+    [
+      11,
+      8,
+      1,
+      9,
+      0,
+      "STRING"
+    ],
+    [
+      12,
+      9,
+      0,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      13,
+      9,
+      0,
+      11,
+      2,
+      "STRING"
+    ],
+    [
+      14,
+      9,
+      1,
+      10,
+      4,
+      "STRING"
+    ],
+    [
+      15,
+      4,
+      0,
+      10,
+      2,
+      "AUDIO"
+    ],
+    [
+      16,
+      2,
+      1,
+      10,
+      3,
+      "STRING"
+    ],
+    [
+      17,
+      10,
+      0,
+      11,
+      1,
+      "STRING"
+    ],
+    [
+      18,
+      6,
+      0,
+      11,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.5454545454545457,
+      "offset": [
+        187.11805454812642,
+        522.2360668547866
+      ]
+    }
+  },
+  "version": 0.4
+}

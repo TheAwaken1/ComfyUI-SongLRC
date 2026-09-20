@@ -1,0 +1,16 @@
+[project]
+name = "comfyui-songlrc"
+description = "Turn generated song lyrics into a timed .lrc file that matches the saved audio. Works with YuE2 and MiniMax Music 3."
+version = "1.0.0"
+license = { file = "LICENSE" }
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy", "soundfile"]
+
+[project.urls]
+Repository = "https://github.com/TheAwaken1/ComfyUI-SongLRC"
+
+[tool.comfy]
+PublisherId = "theawaken1"
+DisplayName = "ComfyUI-SongLRC"
+Icon = ""
