@@ -1,8 +1,8 @@
 {
-  "id": "8d7f04d7-9f33-4e0d-9ecd-190a8b0a24ce",
+  "id": "66856049-9f9f-4568-b580-5528c8414559",
   "revision": 0,
-  "last_node_id": 11,
-  "last_link_id": 18,
+  "last_node_id": 12,
+  "last_link_id": 20,
   "nodes": [
     {
       "id": 1,
@@ -562,7 +562,9 @@
         "Node name for S&R": "SongLyricsClean"
       },
       "flags": {},
-      "mode": 0
+      "mode": 0,
+      "color": "#4a2d7a",
+      "bgcolor": "#241640"
     },
     {
       "id": 9,
@@ -612,7 +614,8 @@
           "slot_index": 0,
           "links": [
             12,
-            13
+            13,
+            20
           ]
         },
         {
@@ -633,7 +636,9 @@
         "Node name for S&R": "SongFilename"
       },
       "flags": {},
-      "mode": 0
+      "mode": 0,
+      "color": "#6a2d7a",
+      "bgcolor": "#341640"
     },
     {
       "id": 10,
@@ -745,7 +750,8 @@
           "type": "STRING",
           "slot_index": 0,
           "links": [
-            17
+            17,
+            19
           ]
         }
       ],
@@ -764,7 +770,9 @@
         "Node name for S&R": "SongLyricsToLRC"
       },
       "flags": {},
-      "mode": 0
+      "mode": 0,
+      "color": "#8a2d6a",
+      "bgcolor": "#43163a"
     },
     {
       "id": 11,
@@ -813,7 +821,59 @@
         "Node name for S&R": "SongSaveMatchingLRC"
       },
       "flags": {},
-      "mode": 0
+      "mode": 0,
+      "color": "#17605f",
+      "bgcolor": "#0d3535"
+    },
+    {
+      "id": 12,
+      "type": "SongSaveLRC",
+      "pos": [
+        2620,
+        1040
+      ],
+      "size": [
+        300,
+        82
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "title": "Save LRC (auto)",
+      "inputs": [
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "link": 19
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "path",
+          "name": "path",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": null
+        }
+      ],
+      "widgets_values": [
+        "audio/songs/lyrics"
+      ],
+      "properties": {
+        "Node name for S&R": "SongSaveLRC"
+      },
+      "color": "#1f6b5a",
+      "bgcolor": "#103a31"
     }
   ],
   "links": [
@@ -960,6 +1020,22 @@
       11,
       0,
       "AUDIO"
+    ],
+    [
+      19,
+      10,
+      0,
+      12,
+      0,
+      "STRING"
+    ],
+    [
+      20,
+      9,
+      0,
+      12,
+      1,
+      "STRING"
     ]
   ],
   "groups": [],

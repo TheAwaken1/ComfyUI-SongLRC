@@ -20,6 +20,7 @@ This pack was previously called **ComfyUI-MiniMaxLRC**. See Migrating below.
 - Score-aware timing from a YuE2 ABC score when it is not
 - A song title taken from a `Title:` line, or derived from the repeated hook
 - Audio and LRC written with the identical name and five digit counter
+- A standalone LRC saver too, so the pack needs no other node packs
 - ComfyUI's own Save Audio (Advanced) keeps working, so FLAC, MP3 and Opus
   quality controls are untouched
 
@@ -45,6 +46,16 @@ Restart ComfyUI.
 | Song Filename | Turns a title into `<folder>/<title>` for Save Audio (Advanced). |
 | Lyrics to LRC | Times the lyrics against the audio and writes the LRC text. |
 | Save Matching LRC | Writes the LRC next to the audio file that was just saved. |
+| Save LRC (auto) | Writes the LRC on its own, with its own counter. |
+
+The two savers do different jobs. **Save Matching LRC** waits for Save Audio
+(Advanced) and reuses that file's exact name and number, so the pair always match.
+**Save LRC (auto)** does not wait for anything, which is what you want when you are
+only after the lyrics, or when the audio is saved somewhere else. Use either, or
+both.
+
+The nodes are colour coded: violet through magenta along the lyric path, teal for
+the two savers, so a SongLRC chain stays readable on a crowded canvas.
 
 ## Using it
 

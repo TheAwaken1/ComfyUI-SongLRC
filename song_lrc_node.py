@@ -1117,11 +1117,57 @@ class SongSaveMatchingLRC:
         }
 
 
+class SongSaveLRC:
+    """Write the LRC on its own, without waiting for an audio file."""
+
+    CATEGORY = "audio/SongLRC"
+    FUNCTION = "save"
+    OUTPUT_NODE = True
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("path",)
+    DESCRIPTION = "Save the LRC to the output folder with its own counter."
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {
+            "lrc": ("STRING", {"forceInput": True}),
+            "filename_prefix": ("STRING", {
+                "default": "audio/songs/lyrics",
+                "tooltip": "Path inside the output folder. Connect Song Filename to match the audio name.",
+            }),
+        }}
+
+    def save(self, lrc, filename_prefix="audio/songs/lyrics"):
+        import folder_paths
+
+        output_root = os.path.abspath(folder_paths.get_output_directory())
+        normalized = str(filename_prefix or "").replace("\\", "/").strip("/")
+        subfolder, filename = os.path.split(normalized)
+        filename = safe_song_title(filename)
+        output_dir = os.path.abspath(os.path.join(output_root, subfolder))
+        if os.path.commonpath([output_root, output_dir]) != output_root:
+            raise ValueError("LRC output must stay inside the ComfyUI output directory")
+        os.makedirs(output_dir, exist_ok=True)
+
+        pattern = re.compile(rf"^{re.escape(filename)}_(\d{{5}})[.]lrc$", re.IGNORECASE)
+        used = [int(match.group(1)) for name in os.listdir(output_dir)
+                for match in [pattern.match(name)] if match]
+        counter = max(used) + 1 if used else 1
+        name = f"{filename}_{counter:05d}.lrc"
+        with open(os.path.join(output_dir, name), "w", encoding="utf-8",
+                  newline="\n") as handle:
+            handle.write(str(lrc))
+
+        relative = os.path.join(subfolder, name).replace("\\", "/")
+        return {"ui": {"text": [f"Saved LRC: {relative}"]}, "result": (relative,)}
+
+
 NODE_CLASS_MAPPINGS = {
     "SongLyricsToLRC": SongLyricsToLRC,
     "SongLyricsClean": SongLyricsClean,
     "SongFilename": SongFilename,
     "SongSaveMatchingLRC": SongSaveMatchingLRC,
+    "SongSaveLRC": SongSaveLRC,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -1129,6 +1175,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SongLyricsClean": "Lyrics Clean",
     "SongFilename": "Song Filename",
     "SongSaveMatchingLRC": "Save Matching LRC",
+    "SongSaveLRC": "Save LRC (auto)",
 }
 
 _LEGACY_NAMES = (

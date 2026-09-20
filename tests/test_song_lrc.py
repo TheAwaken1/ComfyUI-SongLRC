@@ -240,14 +240,58 @@ Hold the line tonight"""
 
         filename = next(n for n in graph["nodes"] if n["type"] == "SongFilename")
         self.assertEqual({target(i)[0] for i in filename["outputs"][0]["links"]},
-                         {"SaveAudioAdvanced", "SongSaveMatchingLRC"},
+                         {"SaveAudioAdvanced", "SongSaveMatchingLRC", "SongSaveLRC"},
                          "audio and LRC share one prefix, so names always match")
+        self.assertIn("SongSaveLRC", types, "the pack saves its own LRC, with no outside node")
 
         lrc = next(n for n in graph["nodes"] if n["type"] == "SongLyricsToLRC")
         structure = next(i for i in lrc["inputs"] if i["name"] == "structure")
         self.assertIsNotNone(structure["link"], "score timing is wired by default")
         audio = next(i for i in lrc["inputs"] if i["name"] == "audio")
         self.assertIsNotNone(audio["link"], "forced alignment needs the audio")
+
+
+    def test_save_lrc_auto_writes_its_own_numbered_file(self):
+        """It must not need an audio file to already exist."""
+        with tempfile.TemporaryDirectory() as output_dir:
+            previous = sys.modules.get("folder_paths")
+            sys.modules["folder_paths"] = types.SimpleNamespace(
+                get_output_directory=lambda: output_dir)
+            try:
+                first = node.SongSaveLRC().save("[00:00.00]One", "audio/songs/My Song")
+                second = node.SongSaveLRC().save("[00:00.00]Two", "audio/songs/My Song")
+            finally:
+                if previous is None:
+                    sys.modules.pop("folder_paths", None)
+                else:
+                    sys.modules["folder_paths"] = previous
+            self.assertEqual(first["result"][0], "audio/songs/My Song_00001.lrc")
+            self.assertEqual(second["result"][0], "audio/songs/My Song_00002.lrc")
+            written = Path(output_dir) / "audio" / "songs" / "My Song_00002.lrc"
+            self.assertEqual(written.read_text(encoding="utf-8"), "[00:00.00]Two")
+
+    def test_save_lrc_auto_refuses_to_escape_the_output_folder(self):
+        with tempfile.TemporaryDirectory() as output_dir:
+            previous = sys.modules.get("folder_paths")
+            sys.modules["folder_paths"] = types.SimpleNamespace(
+                get_output_directory=lambda: output_dir)
+            try:
+                with self.assertRaises(ValueError):
+                    node.SongSaveLRC().save("x", "../../escaped")
+            finally:
+                if previous is None:
+                    sys.modules.pop("folder_paths", None)
+                else:
+                    sys.modules["folder_paths"] = previous
+
+    def test_every_node_has_a_colour(self):
+        """The UI file must cover each node the pack registers."""
+        palette = (NODE_PATH.parent / "web" / "colors.js").read_text(encoding="utf-8")
+        for name in node.NODE_CLASS_MAPPINGS:
+            if name.startswith("MiniMax"):
+                continue
+            with self.subTest(name=name):
+                self.assertIn(name + ":", palette)
 
 
 if __name__ == "__main__":
