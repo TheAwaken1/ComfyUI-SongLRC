@@ -54,13 +54,18 @@ The two savers do different jobs. **Save Matching LRC** waits for Save Audio
 only after the lyrics, or when the audio is saved somewhere else. Use either, or
 both.
 
-The nodes are colour coded: violet through magenta along the lyric path, teal for
-the two savers, so a SongLRC chain stays readable on a crowded canvas.
+The nodes are colour coded: warm amber through crimson along the lyric path, deep
+blue for the two savers, so a SongLRC chain stays readable on a crowded canvas.
 
 ## Using it
 
-Load `example_workflows/score_editor_to_song_with_lrc.json`. It is the stock FL-YuE2
-`score_editor_to_song` graph with the four nodes added and nothing else changed.
+Load `example_workflows/yue2_song_to_lrc.json`. It is a straight line from lyrics to
+a finished song with a matching LRC, using only this pack, FL-YuE2 and ComfyUI's own
+audio nodes.
+
+Note that FL-YuE2 names the render length `max_duration`, which is what the example
+uses. If you run a fork that renamed it, set the length on the Render node once after
+loading.
 
 **You do not need a text generator.** Type or paste your lyrics into Lyrics Clean.
 Its lyrics output feeds both the Compose node and Lyrics to LRC, so the words that

@@ -1,13 +1,14 @@
 import { app } from "../../scripts/app.js";
 
-// A violet-to-magenta run for the lyric pipeline, teal for the two savers,
-// so a SongLRC chain reads as one group on a busy canvas.
+// SongLRC's own palette: a warm amber-to-crimson run along the lyric path,
+// deep blue for the two savers. Chosen to sit apart from the node packs it
+// commonly shares a canvas with.
 const PALETTE = {
-  SongLyricsClean: { color: "#4a2d7a", bgcolor: "#241640" },
-  SongFilename: { color: "#6a2d7a", bgcolor: "#341640" },
-  SongLyricsToLRC: { color: "#8a2d6a", bgcolor: "#43163a" },
-  SongSaveLRC: { color: "#1f6b5a", bgcolor: "#103a31" },
-  SongSaveMatchingLRC: { color: "#17605f", bgcolor: "#0d3535" },
+  SongLyricsClean: { color: "#7a4a12", bgcolor: "#3d2408" },
+  SongFilename: { color: "#8a3d14", bgcolor: "#451d09" },
+  SongLyricsToLRC: { color: "#962f3a", bgcolor: "#4a161c" },
+  SongSaveLRC: { color: "#1e3a6b", bgcolor: "#0f1d38" },
+  SongSaveMatchingLRC: { color: "#16305c", bgcolor: "#0b1730" },
 };
 
 console.log("[SongLRC] node colors loaded");

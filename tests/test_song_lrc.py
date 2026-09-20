@@ -213,7 +213,7 @@ Hold the line tonight"""
 
     def test_bundled_workflow_runs_without_a_text_generator(self):
         """The stock FL-YuE2 graph has no generator, so lyrics must be typed."""
-        path = NODE_PATH.parent / "example_workflows" / "score_editor_to_song_with_lrc.json"
+        path = NODE_PATH.parent / "example_workflows" / "yue2_song_to_lrc.json"
         graph = json.loads(path.read_text(encoding="utf-8"))
         by_id = {n["id"]: n for n in graph["nodes"]}
         types = {n["type"] for n in graph["nodes"]}
@@ -221,6 +221,8 @@ Hold the line tonight"""
                               "SongSaveMatchingLRC"}, types)
         self.assertIn("SaveAudioAdvanced", types, "native saver keeps the format controls")
         self.assertFalse(types & {"TextGenerate", "SparkStudioChat", "ShowText|pysssss"})
+        # The pack must not depend on nodes from other packs to run.
+        self.assertFalse(types & {"SaveText|pysssss", "FL_YuE2_ScoreEditor"})
 
         clean = next(n for n in graph["nodes"] if n["type"] == "SongLyricsClean")
         self.assertTrue(clean["widgets_values"][0].strip(), "ships with usable lyrics")
@@ -243,6 +245,10 @@ Hold the line tonight"""
                          {"SaveAudioAdvanced", "SongSaveMatchingLRC", "SongSaveLRC"},
                          "audio and LRC share one prefix, so names always match")
         self.assertIn("SongSaveLRC", types, "the pack saves its own LRC, with no outside node")
+
+        for item in graph["nodes"]:
+            if item["type"].startswith("Song"):
+                self.assertTrue(item.get("color"), item["type"] + " needs a colour")
 
         lrc = next(n for n in graph["nodes"] if n["type"] == "SongLyricsToLRC")
         structure = next(i for i in lrc["inputs"] if i["name"] == "structure")
