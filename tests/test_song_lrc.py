@@ -8,6 +8,9 @@ import types
 import unittest
 from pathlib import Path
 
+import shutil
+import subprocess
+
 import torch
 
 NEWLINE = chr(10)
@@ -331,6 +334,70 @@ Hold the line tonight"""
         preview = (NODE_PATH.parent / "web" / "preview.js").read_text(encoding="utf-8")
         for name in ("SongSaveLRC", "SongSaveMatchingLRC"):
             self.assertIn(name, preview)
+
+
+    def test_music_player_hands_the_browser_a_file_and_the_lyrics(self):
+        lrc = "[ti:Test]" + NEWLINE + "[00:01.00]A timed line"
+        with tempfile.TemporaryDirectory() as temp_dir:
+            previous = sys.modules.get("folder_paths")
+            sys.modules["folder_paths"] = types.SimpleNamespace(
+                get_temp_directory=lambda: temp_dir)
+            try:
+                audio = {"waveform": torch.zeros(1, 2, 48000), "sample_rate": 48000}
+                result = node.SongMusicPlayer().play(audio, lrc)
+            finally:
+                if previous is None:
+                    sys.modules.pop("folder_paths", None)
+                else:
+                    sys.modules["folder_paths"] = previous
+
+            entry = result["ui"]["audio"][0]
+            self.assertEqual(entry["type"], "temp", "served from the temp folder")
+            self.assertTrue(entry["filename"].endswith(".flac"))
+            written = Path(temp_dir) / entry["filename"]
+            self.assertTrue(written.exists() and written.stat().st_size > 0)
+            self.assertEqual(result["ui"]["lrc"], [lrc])
+            self.assertIs(result["result"][0], audio, "audio passes through unchanged")
+
+    def test_music_player_handles_mono_and_unbatched_audio(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            previous = sys.modules.get("folder_paths")
+            sys.modules["folder_paths"] = types.SimpleNamespace(
+                get_temp_directory=lambda: temp_dir)
+            try:
+                for waveform in (torch.zeros(1, 1, 2400), torch.zeros(1, 2400)):
+                    with self.subTest(shape=tuple(waveform.shape)):
+                        result = node.SongMusicPlayer().play(
+                            {"waveform": waveform, "sample_rate": 24000}, "[00:00.00]x")
+                        name = result["ui"]["audio"][0]["filename"]
+                        self.assertTrue((Path(temp_dir) / name).stat().st_size > 0)
+            finally:
+                if previous is None:
+                    sys.modules.pop("folder_paths", None)
+                else:
+                    sys.modules["folder_paths"] = previous
+
+    def test_lrc_parser_in_the_browser_matches_what_the_node_writes(self):
+        """The parser is the risky half, so exercise it in a real JS runtime."""
+        node_exe = shutil.which("node")
+        if not node_exe:
+            self.skipTest("node is not available")
+        script = (
+            "import { parseLrc, activeCue } from './lrc.js';"
+            "const lines = ['[ti:Song Name]','[length:02:30.00]','[by:SongLRC]','',"
+            "'[00:13.72]First line','[00:17.14]Second line','[00:21.00]','[01:05.50]Later'];"
+            "const { cues, title } = parseLrc(lines.join(String.fromCharCode(10)));"
+            "const shape = [title, cues.length, cues[2].text === '',"
+            "activeCue(cues, 0), activeCue(cues, 18), activeCue(cues, 22), activeCue(cues, 70)];"
+            "console.log(JSON.stringify(shape));"
+        )
+        output = subprocess.run(
+            [node_exe, "--input-type=module", "-e", script],
+            cwd=NODE_PATH.parent / "web", capture_output=True, text=True, timeout=60,
+        )
+        self.assertEqual(output.returncode, 0, output.stderr)
+        self.assertEqual(json.loads(output.stdout.strip()),
+                         ["Song Name", 4, True, -1, 1, 2, 3])
 
 
 if __name__ == "__main__":

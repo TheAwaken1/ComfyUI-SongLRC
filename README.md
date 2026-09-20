@@ -21,6 +21,7 @@ This pack was previously called **ComfyUI-MiniMaxLRC**. See Migrating below.
 - A song title taken from a `Title:` line, or derived from the repeated hook
 - Audio and LRC written with the identical name and five digit counter
 - A standalone LRC saver too, so the pack needs no other node packs
+- A player that scrolls the lyrics against the audio, so timing is checked by ear
 - ComfyUI's own Save Audio (Advanced) keeps working, so FLAC, MP3 and Opus
   quality controls are untouched
 
@@ -47,9 +48,21 @@ Restart ComfyUI.
 | Lyrics to LRC | Times the lyrics against the audio and writes the LRC text. |
 | Save Matching LRC | Writes the LRC next to the audio file that was just saved. |
 | Save LRC (auto) | Writes the LRC on its own, with its own counter. |
+| Music Player (SongLRC) | Plays the song with its lyrics highlighted in time. |
 
 Both savers print the finished LRC on the node after a run, so the timestamps
 can be checked without opening the file.
+
+### The player
+
+Connect the final `AUDIO` and the LRC to **Music Player (SongLRC)** and run the
+graph. The node plays the song and lights each line as it arrives. Click any line to
+jump to it. A blank cue is an instrumental gap, so the lyrics clear rather than
+leaving a line stuck on screen.
+
+It is the fastest way to judge timing, because a drift of half a second is obvious
+by ear and invisible in a text file. If lines run consistently early or late, adjust
+`timing_scale` on Lyrics to LRC, or shift everything with `offset_seconds`.
 
 The two savers do different jobs. **Save Matching LRC** waits for Save Audio
 (Advanced) and reuses that file's exact name and number, so the pair always match.

@@ -1,8 +1,8 @@
 {
-  "id": "62263b7e-3ef3-47d4-88f5-79bd1a3c4720",
+  "id": "2635e3d3-4fdf-4c6a-a5c5-116bcd68f21b",
   "revision": 0,
-  "last_node_id": 11,
-  "last_link_id": 19,
+  "last_node_id": 12,
+  "last_link_id": 21,
   "nodes": [
     {
       "id": 1,
@@ -401,7 +401,8 @@
           "links": [
             10,
             11,
-            12
+            12,
+            20
           ]
         }
       ],
@@ -679,7 +680,8 @@
           "slot_index": 0,
           "links": [
             18,
-            19
+            19,
+            21
           ]
         }
       ],
@@ -862,6 +864,51 @@
       },
       "widgets_values": [],
       "widgets_values_named": {}
+    },
+    {
+      "id": 12,
+      "type": "SongMusicPlayer",
+      "pos": [
+        1340,
+        380
+      ],
+      "size": [
+        380,
+        340
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "title": "5. Listen with the lyrics",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c",
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 20
+        },
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "link": 21
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": null
+        }
+      ],
+      "widgets_values": [],
+      "properties": {
+        "Node name for S&R": "SongMusicPlayer"
+      }
     }
   ],
   "links": [
@@ -1015,6 +1062,22 @@
       0,
       10,
       0,
+      "STRING"
+    ],
+    [
+      20,
+      5,
+      0,
+      12,
+      0,
+      "AUDIO"
+    ],
+    [
+      21,
+      8,
+      0,
+      12,
+      1,
       "STRING"
     ]
   ],

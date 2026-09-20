@@ -1165,12 +1165,69 @@ class SongSaveLRC:
         return {"ui": {"text": [str(lrc)], "saved": [relative]}, "result": (relative,)}
 
 
+class SongMusicPlayer:
+    """Play the song with its own lyrics scrolling in time."""
+
+    CATEGORY = "audio/SongLRC"
+    FUNCTION = "play"
+    OUTPUT_NODE = True
+    RETURN_TYPES = ("AUDIO",)
+    RETURN_NAMES = ("audio",)
+    DESCRIPTION = "Play the audio with its LRC highlighted line by line."
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {
+            "audio": ("AUDIO",),
+            "lrc": ("STRING", {"forceInput": True}),
+        }}
+
+    @classmethod
+    def IS_CHANGED(cls, **kwargs):
+        # Always hand the browser a fresh file; the player is a view, not a cache.
+        return float("nan")
+
+    def play(self, audio, lrc):
+        import uuid
+
+        import folder_paths
+        import soundfile as sf
+
+        temp_dir = folder_paths.get_temp_directory()
+        os.makedirs(temp_dir, exist_ok=True)
+        name = "songlrc_" + uuid.uuid4().hex + ".flac"
+
+        samples = audio["waveform"]
+        if hasattr(samples, "detach"):
+            samples = samples.detach().cpu()
+        if hasattr(samples, "numpy"):
+            samples = samples.numpy()
+        samples = np.asarray(samples, dtype=np.float32)
+        if samples.ndim == 3:
+            samples = samples[0]
+        if samples.ndim == 1:
+            samples = samples[None, :]
+        # soundfile wants frames first, channels second.
+        sf.write(os.path.join(temp_dir, name),
+                 np.clip(samples, -1.0, 1.0).transpose(),
+                 int(audio.get("sample_rate") or 44100), format="FLAC")
+
+        return {
+            "ui": {
+                "audio": [{"filename": name, "subfolder": "", "type": "temp"}],
+                "lrc": [str(lrc)],
+            },
+            "result": (audio,),
+        }
+
+
 NODE_CLASS_MAPPINGS = {
     "SongLyricsToLRC": SongLyricsToLRC,
     "SongLyricsClean": SongLyricsClean,
     "SongFilename": SongFilename,
     "SongSaveMatchingLRC": SongSaveMatchingLRC,
     "SongSaveLRC": SongSaveLRC,
+    "SongMusicPlayer": SongMusicPlayer,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -1179,6 +1236,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SongFilename": "Song Filename",
     "SongSaveMatchingLRC": "Save Matching LRC",
     "SongSaveLRC": "Save LRC (auto)",
+    "SongMusicPlayer": "Music Player (SongLRC)",
 }
 
 _LEGACY_NAMES = (

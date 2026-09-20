@@ -11,6 +11,7 @@ const NODES = [
   "SongLyricsToLRC",
   "SongSaveLRC",
   "SongSaveMatchingLRC",
+  "SongMusicPlayer",
 ];
 
 function paint(node) {
