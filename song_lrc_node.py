@@ -1111,8 +1111,9 @@ class SongSaveMatchingLRC:
             handle.write(str(lrc))
 
         lrc_path = os.path.join(subfolder, lrc_name).replace("\\", "/")
+        print(f"[SongLRC] Saved matching LRC: {lrc_path}")
         return {
-            "ui": {"text": [f"Saved matching LRC: {lrc_path}"]},
+            "ui": {"text": [str(lrc)], "saved": [lrc_path]},
             "result": (audio,),
         }
 
@@ -1159,7 +1160,9 @@ class SongSaveLRC:
             handle.write(str(lrc))
 
         relative = os.path.join(subfolder, name).replace("\\", "/")
-        return {"ui": {"text": [f"Saved LRC: {relative}"]}, "result": (relative,)}
+        # Show the timed lyrics on the node, not just where they went.
+        print(f"[SongLRC] Saved LRC: {relative}")
+        return {"ui": {"text": [str(lrc)], "saved": [relative]}, "result": (relative,)}
 
 
 NODE_CLASS_MAPPINGS = {

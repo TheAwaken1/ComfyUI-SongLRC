@@ -48,6 +48,9 @@ Restart ComfyUI.
 | Save Matching LRC | Writes the LRC next to the audio file that was just saved. |
 | Save LRC (auto) | Writes the LRC on its own, with its own counter. |
 
+Both savers print the finished LRC on the node after a run, so the timestamps
+can be checked without opening the file.
+
 The two savers do different jobs. **Save Matching LRC** waits for Save Audio
 (Advanced) and reuses that file's exact name and number, so the pair always match.
 **Save LRC (auto)** does not wait for anything, which is what you want when you are

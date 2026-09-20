@@ -10,6 +10,8 @@ from pathlib import Path
 
 import torch
 
+NEWLINE = chr(10)
+
 
 NODE_PATH = Path(__file__).resolve().parents[1] / "song_lrc_node.py"
 spec = importlib.util.spec_from_file_location("song_lrc_node", NODE_PATH)
@@ -298,6 +300,37 @@ Hold the line tonight"""
                 continue
             with self.subTest(name=name):
                 self.assertIn(name, palette)
+
+
+    def test_savers_show_the_timed_lyrics_on_the_node(self):
+        """The node must display the LRC, not only where it was written."""
+        lrc = "[ti:Test]" + NEWLINE + "[00:01.00]A timed line"
+        with tempfile.TemporaryDirectory() as output_dir:
+            previous = sys.modules.get("folder_paths")
+            sys.modules["folder_paths"] = types.SimpleNamespace(
+                get_output_directory=lambda: output_dir)
+            try:
+                auto = node.SongSaveLRC().save(lrc, "audio/songs/Test")
+
+                audio_dir = os.path.join(output_dir, "audio", "songs")
+                Path(os.path.join(audio_dir, "Test_00004.mp3")).write_bytes(b"fake")
+                audio = {"waveform": torch.zeros(1, 2, 480), "sample_rate": 48000}
+                matching = node.SongSaveMatchingLRC().save(audio, lrc, "audio/songs/Test")
+            finally:
+                if previous is None:
+                    sys.modules.pop("folder_paths", None)
+                else:
+                    sys.modules["folder_paths"] = previous
+
+        for result in (auto, matching):
+            self.assertEqual(result["ui"]["text"], [lrc])
+            self.assertTrue(result["ui"]["saved"][0].endswith(".lrc"))
+        self.assertIn("[00:01.00]", auto["ui"]["text"][0])
+
+    def test_preview_extension_covers_both_savers(self):
+        preview = (NODE_PATH.parent / "web" / "preview.js").read_text(encoding="utf-8")
+        for name in ("SongSaveLRC", "SongSaveMatchingLRC"):
+            self.assertIn(name, preview)
 
 
 if __name__ == "__main__":
