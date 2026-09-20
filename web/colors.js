@@ -11,6 +11,11 @@ const PALETTE = {
   SongSaveMatchingLRC: { color: "#16305c", bgcolor: "#0b1730" },
 };
 
+function paint(node, theme) {
+  node.color = theme.color;
+  node.bgcolor = theme.bgcolor;
+}
+
 console.log("[SongLRC] node colors loaded");
 
 app.registerExtension({
@@ -18,7 +23,25 @@ app.registerExtension({
   async beforeRegisterNodeDef(nodeType, nodeData) {
     const theme = PALETTE[nodeData.name];
     if (!theme) return;
+
+    // Older frontends read these off the prototype.
     nodeType.prototype.color = theme.color;
     nodeType.prototype.bgcolor = theme.bgcolor;
+
+    // Newer ones only honour a value set on the node itself.
+    const onCreated = nodeType.prototype.onNodeCreated;
+    nodeType.prototype.onNodeCreated = function () {
+      const result = onCreated ? onCreated.apply(this, arguments) : undefined;
+      paint(this, theme);
+      return result;
+    };
+
+    // Loading a workflow restores saved colours, so only fill in the gaps.
+    const onConfigure = nodeType.prototype.onConfigure;
+    nodeType.prototype.onConfigure = function (info) {
+      const result = onConfigure ? onConfigure.apply(this, arguments) : undefined;
+      if (!info || !info.color) paint(this, theme);
+      return result;
+    };
   },
 });
