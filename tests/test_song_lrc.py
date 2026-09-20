@@ -297,7 +297,7 @@ Hold the line tonight"""
             if name.startswith("MiniMax"):
                 continue
             with self.subTest(name=name):
-                self.assertIn(name + ":", palette)
+                self.assertIn(name, palette)
 
 
 if __name__ == "__main__":

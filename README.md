@@ -54,8 +54,8 @@ The two savers do different jobs. **Save Matching LRC** waits for Save Audio
 only after the lyrics, or when the audio is saved somewhere else. Use either, or
 both.
 
-The nodes are colour coded: warm amber through crimson along the lyric path, deep
-blue for the two savers, so a SongLRC chain stays readable on a crowded canvas.
+Every node in the pack shares one colour, a burnt-orange title over a deep crimson
+body, so a SongLRC chain is recognisable at a glance among other node packs.
 
 ## Using it
 

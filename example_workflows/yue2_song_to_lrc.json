@@ -116,8 +116,8 @@
         "text": "[verse]\nPorch light buzzing over cracked cement\nKeys still warm from a day that came and went\n[chorus]\nLeave the radio on for me\n[verse]\nEvery road home takes the long way round\n[chorus]\nLeave the radio on for me"
       },
       "title": "1. Write the lyrics here",
-      "color": "#7a4a12",
-      "bgcolor": "#3d2408"
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
     },
     {
       "id": 3,
@@ -491,7 +491,7 @@
       },
       "title": "2. Name the files",
       "color": "#8a3d14",
-      "bgcolor": "#451d09"
+      "bgcolor": "#4a161c"
     },
     {
       "id": 7,
@@ -709,7 +709,7 @@
         "prefer_alignment": true
       },
       "title": "3. Time the lyrics",
-      "color": "#962f3a",
+      "color": "#8a3d14",
       "bgcolor": "#4a161c"
     },
     {
@@ -761,8 +761,8 @@
       "widgets_values": [],
       "widgets_values_named": {},
       "title": "4a. LRC matching the audio",
-      "color": "#16305c",
-      "bgcolor": "#0b1730"
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
     },
     {
       "id": 10,
@@ -814,8 +814,8 @@
         "filename_prefix": "audio/songs/lyrics"
       },
       "title": "4b. LRC on its own",
-      "color": "#1e3a6b",
-      "bgcolor": "#0f1d38"
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
     },
     {
       "id": 11,
