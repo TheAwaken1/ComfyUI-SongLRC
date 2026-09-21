@@ -400,5 +400,28 @@ Hold the line tonight"""
                          ["Song Name", 4, True, -1, 1, 2, 3])
 
 
+    def test_derived_titles_do_not_end_on_a_fragment(self):
+        """A fixed word cut produced titles like 'Oh I Am Wishing For That V'."""
+        cases = {
+            "Oh I am wishing for that VRAM tonight": "Oh I Am Wishing",
+            "Glory to the cache let the numbers fly": "Glory To The Cache",
+            "Leave the radio on for me": "Leave The Radio On For Me",
+        }
+        for hook, expected in cases.items():
+            with self.subTest(hook=hook):
+                lyrics = "[chorus]" + NEWLINE + hook + NEWLINE + hook
+                title = node.derive_song_title(lyrics)
+                self.assertEqual(title, expected)
+                last = title.split()[-1].casefold()
+                self.assertNotIn(last, node._TITLE_FILLER)
+                self.assertGreater(len(last), 1)
+
+    def test_preview_shows_the_title_and_timings_only(self):
+        preview = (NODE_PATH.parent / "web" / "preview.js").read_text(encoding="utf-8")
+        self.assertIn("parseLrc", preview, "the title comes from the parser")
+        self.assertIn("TIMED.test", preview, "only timestamped lines are shown")
+        self.assertNotIn("saved", preview, "the file path is console output, not screen clutter")
+
+
 if __name__ == "__main__":
     unittest.main()

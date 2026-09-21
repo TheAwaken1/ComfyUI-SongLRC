@@ -1,9 +1,21 @@
 import { app } from "../../scripts/app.js";
 import { ComfyWidgets } from "../../scripts/widgets.js";
+import { parseLrc } from "./lrc.js";
 
-// Show the finished LRC on the saver nodes, the way a text saver would, so
-// the timestamps can be checked without opening the file.
+// Show the finished LRC on the saver nodes: the title, then the timed lines.
+// The length and byline tags belong in the file, not on screen.
 const SHOWS_LRC = ["SongSaveLRC", "SongSaveMatchingLRC"];
+
+const TIMED = /^\[\d/;
+
+function tidy(text) {
+  const { title } = parseLrc(text);
+  const body = String(text || "")
+    .split(/\r?\n/)
+    .filter((line) => TIMED.test(line.trim()))
+    .join("\n");
+  return (title || "Untitled") + "\n\n" + body;
+}
 
 app.registerExtension({
   name: "SongLRC.Preview",
@@ -25,8 +37,7 @@ app.registerExtension({
         widget.inputEl.style.opacity = 0.85;
         widget.serializeValue = () => undefined;
       }
-      const saved = message.saved && message.saved.length ? message.saved[0] : "";
-      widget.value = saved ? `# ${saved}\n${lines.join("")}` : lines.join("");
+      widget.value = tidy(lines.join(""));
       requestAnimationFrame(() => {
         const size = this.computeSize();
         this.setSize([Math.max(this.size[0], size[0]), Math.max(this.size[1], size[1])]);

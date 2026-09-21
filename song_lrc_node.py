@@ -88,6 +88,13 @@ def sanitize_generated_lyrics(raw: str) -> tuple[str, str]:
     return lyrics, title
 
 
+_TITLE_FILLER = {
+    "a", "an", "and", "are", "as", "at", "be", "but", "for", "from", "i", "if",
+    "in", "is", "it", "its", "let", "like", "my", "of", "on", "or", "so", "that",
+    "the", "then", "this", "to", "up", "was", "we", "when", "with", "you", "your",
+}
+
+
 def derive_song_title(lyrics: str) -> str:
     """Derive a short hook-based title when the lyrics carry no Title: line."""
     candidates: list[tuple[str, str, int, str]] = []
@@ -124,6 +131,10 @@ def derive_song_title(lyrics: str) -> str:
     while len(words) > 3 and words[-1].casefold() in {"oh", "ooh", "yeah", "no", "la", "hey"}:
         words.pop()
     words = words[:6]
+    # Cutting at a fixed word count leaves titles hanging on a preposition, or
+    # on half a word such as the "V" of "VRAM". Back off to a natural stop.
+    while len(words) > 2 and (words[-1].casefold() in _TITLE_FILLER or len(words[-1]) < 2):
+        words.pop()
     title = " ".join(
         word if (word.isupper() and len(word) > 1) else word[:1].upper() + word[1:]
         for word in words

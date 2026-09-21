@@ -50,8 +50,9 @@ Restart ComfyUI.
 | Save LRC (auto) | Writes the LRC on its own, with its own counter. |
 | Music Player (SongLRC) | Plays the song with its lyrics highlighted in time. |
 
-Both savers print the finished LRC on the node after a run, so the timestamps
-can be checked without opening the file.
+Both savers show the finished lyrics on the node after a run: the song title, then
+the timed lines. The length and byline tags stay in the file, where players read
+them, rather than cluttering the node. The saved path goes to the console.
 
 ### The player
 
