@@ -95,7 +95,12 @@ strips the old timestamps and header tags first, and takes the title from the fi
 so nothing gets timed twice. Nothing else needs to be installed, which makes it
 the quickest way to see how the six nodes connect.
 
-**`example_workflows/yue2_song_to_lrc.json`** is the full pipeline. Load it. It is a straight line from lyrics to
+**`example_workflows/yue2_song_to_lrc.json`** is the full pipeline using
+[ComfyUI-FL-YuE2](https://github.com/filliptm/ComfyUI-FL-YuE2).
+
+**`example_workflows/comfy_yue2_song_to_lrc.json`** is the same pipeline on ComfyUI's
+own YuE2 nodes, so it needs no song node pack at all. The generated ABC score feeds
+the LRC timing here too, so sections land where the music puts them. It is a straight line from lyrics to
 a finished song with a matching LRC, using only this pack, FL-YuE2 and ComfyUI's own
 audio nodes.
 

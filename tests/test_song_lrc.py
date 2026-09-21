@@ -482,5 +482,39 @@ Hold the line tonight"""
                          ["[verse]", "First line", "[chorus]", "The hook"])
 
 
+    def test_core_comfyui_yue2_example_is_wired_correctly(self):
+        """Second engine path: ComfyUI's own YuE2 nodes, no custom song pack."""
+        path = NODE_PATH.parent / "example_workflows" / "comfy_yue2_song_to_lrc.json"
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        by_id = {n["id"]: n for n in graph["nodes"]}
+        types = {n["type"] for n in graph["nodes"]}
+        self.assertLessEqual({"YuE2GenerateABC", "YuE2GenerateMusic",
+                              "EmptyYuE2LatentAudio", "VAEDecodeAudio"}, types)
+        self.assertFalse([t for t in types if t.startswith("FL_YuE2")],
+                         "this path uses core nodes, not the FL pack")
+
+        def source(link_id):
+            for link in graph["links"]:
+                if link[0] == link_id:
+                    return by_id[link[1]]["type"], link[2]
+            return None
+
+        lrc = next(n for n in graph["nodes"] if n["type"] == "SongLyricsToLRC")
+        structure = next(i for i in lrc["inputs"] if i["name"] == "structure")
+        self.assertEqual(source(structure["link"])[0], "YuE2GenerateABC",
+                         "section timing comes from the generated score")
+        audio = next(i for i in lrc["inputs"] if i["name"] == "audio")
+        self.assertEqual(source(audio["link"])[0], "VAEDecodeAudio")
+
+        latent = next(n for n in graph["nodes"] if n["type"] == "EmptyYuE2LatentAudio")
+        seconds = next(i for i in latent["inputs"] if i["name"] == "seconds")
+        self.assertEqual(source(seconds["link"]), ("YuE2GenerateMusic", 1),
+                         "latent length follows the sung duration")
+
+        for item in graph["nodes"]:
+            if item["type"].startswith("Song"):
+                self.assertTrue(item.get("color"), item["type"] + " needs a colour")
+
+
 if __name__ == "__main__":
     unittest.main()
