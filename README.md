@@ -96,13 +96,19 @@ strips the old timestamps and header tags first, and takes the title from the fi
 so nothing gets timed twice. Nothing else needs to be installed, which makes it
 the quickest way to see how the six nodes connect.
 
+![The full pipeline on ComfyUI-FL-YuE2](images/yue2-song-to-lrc.png)
+
 **`example_workflows/yue2_song_to_lrc.json`** is the full pipeline using
 [ComfyUI-FL-YuE2](https://github.com/filliptm/ComfyUI-FL-YuE2).
+
+![Song to LRC with Qwen3-VL writing the lyrics](images/yue2-song-to-lrc-qwen3.png)
 
 **`example_workflows/yue2_song_to_lrc_qwen3.json`** adds a local Qwen3-VL model that
 writes the lyrics, so a song idea becomes a finished track with timed lyrics in one
 run. The generated text goes into Lyrics Clean, which feeds both the song model and
 the timing, so the sung words and the timed words cannot drift apart.
+
+![The same pipeline on ComfyUI's own YuE2 nodes](images/comfy-yue2-song-to-lrc.png)
 
 **`example_workflows/comfy_yue2_song_to_lrc.json`** is the same pipeline on ComfyUI's
 own YuE2 nodes, so it needs no song node pack at all. The generated ABC score feeds
