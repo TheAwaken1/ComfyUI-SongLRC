@@ -731,8 +731,7 @@
           "slot_index": 0,
           "links": [
             20,
-            21,
-            22
+            21
           ]
         },
         {
@@ -937,7 +936,6 @@
           "slot_index": 0,
           "links": [
             25,
-            26,
             27
           ]
         }
@@ -1008,56 +1006,6 @@
         "Node name for S&R": "SongSaveMatchingLRC"
       },
       "title": "6a. LRC beside the audio",
-      "color": "#8a3d14",
-      "bgcolor": "#4a161c"
-    },
-    {
-      "id": 13,
-      "type": "SongSaveLRC",
-      "pos": [
-        2380,
-        200
-      ],
-      "size": [
-        300,
-        82
-      ],
-      "flags": {},
-      "order": 12,
-      "mode": 0,
-      "inputs": [
-        {
-          "localized_name": "lrc",
-          "name": "lrc",
-          "type": "STRING",
-          "link": 26
-        },
-        {
-          "localized_name": "filename_prefix",
-          "name": "filename_prefix",
-          "type": "STRING",
-          "widget": {
-            "name": "filename_prefix"
-          },
-          "link": 22
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "path",
-          "name": "path",
-          "type": "STRING",
-          "slot_index": 0,
-          "links": null
-        }
-      ],
-      "widgets_values": [
-        "audio/songs/lyrics"
-      ],
-      "properties": {
-        "Node name for S&R": "SongSaveLRC"
-      },
-      "title": "6b. LRC on its own",
       "color": "#8a3d14",
       "bgcolor": "#4a161c"
     },
@@ -1277,14 +1225,6 @@
       "STRING"
     ],
     [
-      22,
-      9,
-      0,
-      13,
-      1,
-      "STRING"
-    ],
-    [
       23,
       9,
       1,
@@ -1306,14 +1246,6 @@
       0,
       12,
       1,
-      "STRING"
-    ],
-    [
-      26,
-      11,
-      0,
-      13,
-      0,
       "STRING"
     ],
     [

@@ -247,9 +247,10 @@ Hold the line tonight"""
 
         filename = next(n for n in graph["nodes"] if n["type"] == "SongFilename")
         self.assertEqual({target(i)[0] for i in filename["outputs"][0]["links"]},
-                         {"SaveAudioAdvanced", "SongSaveMatchingLRC", "SongSaveLRC"},
+                         {"SaveAudioAdvanced", "SongSaveMatchingLRC"},
                          "audio and LRC share one prefix, so names always match")
-        self.assertIn("SongSaveLRC", types, "the pack saves its own LRC, with no outside node")
+        self.assertNotIn("SongSaveLRC", types,
+                         "one saver per song: a second would write a duplicate")
 
         for item in graph["nodes"]:
             if item["type"].startswith("Song"):
@@ -514,6 +515,29 @@ Hold the line tonight"""
         for item in graph["nodes"]:
             if item["type"].startswith("Song"):
                 self.assertTrue(item.get("color"), item["type"] + " needs a colour")
+
+
+    def test_song_workflows_write_exactly_one_lrc_per_run(self):
+        """Two savers in one graph means two files with different names."""
+        folder = NODE_PATH.parent / "example_workflows"
+        for name in ("yue2_song_to_lrc.json", "comfy_yue2_song_to_lrc.json"):
+            with self.subTest(workflow=name):
+                graph = json.loads((folder / name).read_text(encoding="utf-8"))
+                savers = [n["type"] for n in graph["nodes"]
+                          if n["type"] in ("SongSaveLRC", "SongSaveMatchingLRC")]
+                self.assertEqual(savers, ["SongSaveMatchingLRC"])
+
+    def test_every_node_appears_in_at_least_one_example(self):
+        folder = NODE_PATH.parent / "example_workflows"
+        seen = set()
+        for path in folder.glob("*.json"):
+            graph = json.loads(path.read_text(encoding="utf-8"))
+            seen.update(n["type"] for n in graph["nodes"])
+        for name in node.NODE_CLASS_MAPPINGS:
+            if name.startswith("MiniMax"):
+                continue
+            with self.subTest(name=name):
+                self.assertIn(name, seen)
 
 
 if __name__ == "__main__":

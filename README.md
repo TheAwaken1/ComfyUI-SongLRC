@@ -73,11 +73,12 @@ It is the fastest way to judge timing, because a drift of half a second is obvio
 by ear and invisible in a text file. If lines run consistently early or late, adjust
 `timing_scale` on Lyrics to LRC, or shift everything with `offset_seconds`.
 
-The two savers do different jobs. **Save Matching LRC** waits for Save Audio
-(Advanced) and reuses that file's exact name and number, so the pair always match.
-**Save LRC (auto)** does not wait for anything, which is what you want when you are
-only after the lyrics, or when the audio is saved somewhere else. Use either, or
-both.
+The two savers do different jobs, and you normally want one of them, not both.
+**Save Matching LRC** waits for Save Audio (Advanced) and reuses that file's exact
+name and number, so the pair always match. That is the one to use whenever you are
+saving the song. **Save LRC (auto)** waits for nothing, which is what you want when
+you are only after the lyrics, or when the audio is saved somewhere else. Running
+both writes the same lyrics twice under different names.
 
 Every node in the pack shares one colour, a burnt-orange title over a deep crimson
 body, so a SongLRC chain is recognisable at a glance among other node packs.
