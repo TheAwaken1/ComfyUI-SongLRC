@@ -1,0 +1,1379 @@
+{
+  "id": "5c60a674-b2f2-45a5-ad31-e4b8c319a4e5",
+  "revision": 0,
+  "last_node_id": 15,
+  "last_link_id": 24,
+  "nodes": [
+    {
+      "id": 3,
+      "type": "FL_YuE2_Plan",
+      "pos": [
+        500,
+        60
+      ],
+      "size": [
+        420,
+        442
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "music_model",
+          "name": "music_model",
+          "type": "YUE2_MODEL",
+          "link": 1
+        },
+        {
+          "localized_name": "style",
+          "name": "style",
+          "type": "STRING",
+          "widget": {
+            "name": "style"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "widget": {
+            "name": "lyrics"
+          },
+          "link": 4
+        },
+        {
+          "localized_name": "planning",
+          "name": "planning",
+          "type": "COMBO",
+          "widget": {
+            "name": "planning"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "score_abc",
+          "name": "score_abc",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "score_abc"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "composition",
+          "name": "composition",
+          "type": "YUE2_PLAN",
+          "slot_index": 0,
+          "links": [
+            7
+          ]
+        },
+        {
+          "localized_name": "score_abc",
+          "name": "score_abc",
+          "type": "STRING",
+          "slot_index": 1,
+          "links": [
+            8
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-fl-yue2",
+        "ver": "0.4.0",
+        "Node name for S&R": "FL_YuE2_Plan"
+      },
+      "widgets_values": [
+        "English alt-country ballad, weathered male vocal, brushed drums, pedal steel, upright bass, unhurried and warm",
+        "",
+        "full",
+        707001,
+        "fixed",
+        "",
+        ""
+      ],
+      "widgets_values_named": {
+        "style": "English alt-country ballad, weathered male vocal, brushed drums, pedal steel, upright bass, unhurried and warm",
+        "lyrics": "",
+        "planning": "full",
+        "seed": 707001,
+        "control_after_generate": "fixed",
+        "score_abc": "",
+        "yue2_result": ""
+      },
+      "color": "#16727c",
+      "bgcolor": "#4F0074"
+    },
+    {
+      "id": 11,
+      "type": "PreviewAudio",
+      "pos": [
+        1340,
+        200
+      ],
+      "size": [
+        300,
+        130
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 12
+        },
+        {
+          "localized_name": "audioUI",
+          "name": "audioUI",
+          "type": "AUDIO_UI",
+          "widget": {
+            "name": "audioUI"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "PreviewAudio"
+      },
+      "widgets_values": [],
+      "widgets_values_named": {}
+    },
+    {
+      "id": 6,
+      "type": "SongFilename",
+      "pos": [
+        505.33333333333326,
+        564
+      ],
+      "size": [
+        340,
+        110
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "localized_name": "title",
+          "name": "title",
+          "type": "STRING",
+          "widget": {
+            "name": "title"
+          },
+          "link": 6
+        },
+        {
+          "localized_name": "folder",
+          "name": "folder",
+          "type": "STRING",
+          "widget": {
+            "name": "folder"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            13,
+            14
+          ]
+        },
+        {
+          "localized_name": "safe_title",
+          "name": "safe_title",
+          "type": "STRING",
+          "slot_index": 1,
+          "links": [
+            16
+          ]
+        }
+      ],
+      "title": "2. Name the files",
+      "properties": {
+        "aux_id": "TheAwaken1/ComfyUI-SongLRC",
+        "ver": "d19f90f25c94315068b010fc4b32b2ebf1fa2e5e",
+        "Node name for S&R": "SongFilename"
+      },
+      "widgets_values": [
+        "",
+        "audio/songs"
+      ],
+      "widgets_values_named": {
+        "title": "",
+        "folder": "audio/songs"
+      },
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 8,
+      "type": "SongLyricsToLRC",
+      "pos": [
+        912.0000000000001,
+        589.3333333333333
+      ],
+      "size": [
+        380,
+        330
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 11
+        },
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "widget": {
+            "name": "lyrics"
+          },
+          "link": 5
+        },
+        {
+          "localized_name": "seconds",
+          "name": "seconds",
+          "type": "FLOAT",
+          "widget": {
+            "name": "seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "structure",
+          "name": "structure",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "structure"
+          },
+          "link": 8
+        },
+        {
+          "localized_name": "title",
+          "name": "title",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "title"
+          },
+          "link": 16
+        },
+        {
+          "localized_name": "artist",
+          "name": "artist",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "artist"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "language",
+          "name": "language",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "language"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "offset_seconds",
+          "name": "offset_seconds",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "offset_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "timing_scale",
+          "name": "timing_scale",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "timing_scale"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "prefer_alignment",
+          "name": "prefer_alignment",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "prefer_alignment"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            18,
+            21
+          ]
+        }
+      ],
+      "title": "3. Time the lyrics",
+      "properties": {
+        "aux_id": "TheAwaken1/ComfyUI-SongLRC",
+        "ver": "d19f90f25c94315068b010fc4b32b2ebf1fa2e5e",
+        "Node name for S&R": "SongLyricsToLRC"
+      },
+      "widgets_values": [
+        "",
+        0,
+        "",
+        "",
+        "",
+        "en",
+        0,
+        1,
+        true
+      ],
+      "widgets_values_named": {
+        "lyrics": "",
+        "seconds": 0,
+        "structure": "",
+        "title": "",
+        "artist": "",
+        "language": "en",
+        "offset_seconds": 0,
+        "timing_scale": 1,
+        "prefer_alignment": true
+      },
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 4,
+      "type": "FL_YuE2_Render",
+      "pos": [
+        960,
+        60
+      ],
+      "size": [
+        346.66666666666674,
+        378.33333333333337
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "music_model",
+          "name": "music_model",
+          "type": "YUE2_MODEL",
+          "link": 2
+        },
+        {
+          "localized_name": "composition",
+          "name": "composition",
+          "type": "YUE2_PLAN",
+          "link": 7
+        },
+        {
+          "localized_name": "max_duration",
+          "name": "max_duration",
+          "type": "INT",
+          "widget": {
+            "name": "max_duration"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "acoustic_steps",
+          "name": "acoustic_steps",
+          "type": "INT",
+          "widget": {
+            "name": "acoustic_steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "temperature",
+          "name": "temperature",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "temperature"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_p",
+          "name": "top_p",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "top_p"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_k",
+          "name": "top_k",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "top_k"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "repetition_penalty",
+          "name": "repetition_penalty",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "repetition_penalty"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "guidance",
+          "name": "guidance",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "guidance"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "music_latents",
+          "name": "music_latents",
+          "type": "YUE2_LATENTS",
+          "slot_index": 0,
+          "links": [
+            9
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-fl-yue2",
+        "ver": "0.4.0",
+        "Node name for S&R": "FL_YuE2_Render"
+      },
+      "widgets_values": [
+        240,
+        32,
+        1,
+        0.95,
+        100,
+        1.2,
+        1,
+        ""
+      ],
+      "widgets_values_named": {
+        "max_duration": 240,
+        "acoustic_steps": 32,
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 100,
+        "repetition_penalty": 1.2,
+        "guidance": 1,
+        "yue2_result": ""
+      },
+      "color": "#16727c",
+      "bgcolor": "#4F0074"
+    },
+    {
+      "id": 5,
+      "type": "FL_YuE2_Decode",
+      "pos": [
+        1340,
+        60
+      ],
+      "size": [
+        300,
+        82
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio_decoder",
+          "name": "audio_decoder",
+          "type": "YUE2_VAE",
+          "link": 3
+        },
+        {
+          "localized_name": "music_latents",
+          "name": "music_latents",
+          "type": "YUE2_LATENTS",
+          "link": 9
+        },
+        {
+          "localized_name": "tile_frames",
+          "name": "tile_frames",
+          "type": "INT",
+          "widget": {
+            "name": "tile_frames"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": [
+            10,
+            11,
+            12,
+            20
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-fl-yue2",
+        "ver": "0.4.0",
+        "Node name for S&R": "FL_YuE2_Decode"
+      },
+      "widgets_values": [
+        64
+      ],
+      "widgets_values_named": {
+        "tile_frames": 64
+      },
+      "color": "#16727c",
+      "bgcolor": "#4F0074"
+    },
+    {
+      "id": 7,
+      "type": "SaveAudioAdvanced",
+      "pos": [
+        1698.79,
+        47.89999999999999
+      ],
+      "size": [
+        320,
+        160
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 10
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": 13
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "quality",
+          "name": "format.quality",
+          "type": "COMBO",
+          "widget": {
+            "name": "format.quality"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audioUI",
+          "name": "audioUI",
+          "type": "AUDIO_UI",
+          "widget": {
+            "name": "audioUI"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": [
+            17
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "SaveAudioAdvanced"
+      },
+      "widgets_values": [
+        "audio/songs/song",
+        "mp3",
+        "V0"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "audio/songs/song",
+        "format": "mp3",
+        "format.quality": "V0"
+      }
+    },
+    {
+      "id": 9,
+      "type": "SongSaveMatchingLRC",
+      "pos": [
+        1704.8400000000001,
+        250.32000000000008
+      ],
+      "size": [
+        300,
+        128
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 17
+        },
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "link": 18
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": null
+        }
+      ],
+      "title": "4a. LRC matching the audio",
+      "properties": {
+        "aux_id": "TheAwaken1/ComfyUI-SongLRC",
+        "ver": "d19f90f25c94315068b010fc4b32b2ebf1fa2e5e",
+        "Node name for S&R": "SongSaveMatchingLRC"
+      },
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 12,
+      "type": "SongMusicPlayer",
+      "pos": [
+        1310.3200000000004,
+        593.4333333333334
+      ],
+      "size": [
+        600.2199999999998,
+        324.27
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 20
+        },
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "link": 21
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": null
+        }
+      ],
+      "title": "5. Listen with the lyrics",
+      "properties": {
+        "aux_id": "TheAwaken1/ComfyUI-SongLRC",
+        "ver": "d19f90f25c94315068b010fc4b32b2ebf1fa2e5e",
+        "Node name for S&R": "SongMusicPlayer"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "player": ""
+      },
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 1,
+      "type": "FL_YuE2_ModelLoader",
+      "pos": [
+        177.49999999999986,
+        60.00000000000001
+      ],
+      "size": [
+        300,
+        78
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "download_missing",
+          "name": "download_missing",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "download_missing"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "music_model",
+          "name": "music_model",
+          "type": "YUE2_MODEL",
+          "slot_index": 0,
+          "links": [
+            1,
+            2
+          ]
+        },
+        {
+          "localized_name": "audio_decoder",
+          "name": "audio_decoder",
+          "type": "YUE2_VAE",
+          "slot_index": 1,
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-fl-yue2",
+        "ver": "0.4.0",
+        "Node name for S&R": "FL_YuE2_ModelLoader"
+      },
+      "widgets_values": [
+        false
+      ],
+      "widgets_values_named": {
+        "download_missing": false
+      },
+      "color": "#16727c",
+      "bgcolor": "#4F0074"
+    },
+    {
+      "id": 2,
+      "type": "SongLyricsClean",
+      "pos": [
+        176.48833333333332,
+        188.4303333333336
+      ],
+      "size": [
+        302.3000000000002,
+        108
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 24
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            4,
+            5
+          ]
+        },
+        {
+          "localized_name": "title",
+          "name": "title",
+          "type": "STRING",
+          "slot_index": 1,
+          "links": [
+            6
+          ]
+        }
+      ],
+      "title": "1. Write the lyrics here",
+      "properties": {
+        "aux_id": "TheAwaken1/ComfyUI-SongLRC",
+        "ver": "d19f90f25c94315068b010fc4b32b2ebf1fa2e5e",
+        "Node name for S&R": "SongLyricsClean"
+      },
+      "widgets_values": [
+        "[verse]\nBottles clink against the cold aluminum case\nStaring at the monitor, losing the race\nThe fan is screaming like a banshee in the night\nTrying to render out the shadows and the light\nGot a glass of rye burning down my throat\nWhile the GPU chokes and the system floats\nI see the memory leak, I see the frame drop low\nWatching all my patience turn to dust and snow\nThe heat rises up, the whiskey goes down\nI’m the king of the crash in this digital town\n\n[chorus]\nOh, I’m wishing for that V-RAM, Lord, give me more\nBreak the lock on the core, kick down the door\nPour another shot, let the whiskey flow\nWatch the compute go, watch the compute go\nYeah, the heat is rising but the frame rate’s flat\nI’m begging the gods, how about that?\nGive me more V-RAM, give me more power\nMake it rain down like a golden hour\n\n[verse]\nNeon signs buzzing through the Tennessee haze\nLost in the matrix for these lazy days\nThe 808s thump in the chest of the beast\nServing up failures for the final feast\nI see the green light blink, I see the red line\nRunning out of time and running out of mind\nThe code is tangled, the logic is frayed\nAnother beautiful disaster in the shade\nI take a sip, the ice melts fast\nNothing in this hardware stack is gonna last\n\n[chorus]\nOh, I’m wishing for that V-RAM, Lord, give me more\nBreak the lock on the core, kick down the door\nPour another shot, let the whiskey flow\nWatch the compute go, watch the compute go\nYeah, the heat is rising but the frame rate’s flat\nI’m begging the gods, how about that?\nGive me more V-RAM, give me more power\nMake it rain down like a golden hour\n\n[bridge]\nSilicon valley dreams turn to ash\nMoney can’t buy what you can’t cache\nThe fan is dying, the glass is empty\nMy wallet’s light, my soul is plenty\nLet it burn, let it crash, let it break\nGive me more than I can take"
+      ],
+      "widgets_values_named": {
+        "text": "[verse]\nBottles clink against the cold aluminum case\nStaring at the monitor, losing the race\nThe fan is screaming like a banshee in the night\nTrying to render out the shadows and the light\nGot a glass of rye burning down my throat\nWhile the GPU chokes and the system floats\nI see the memory leak, I see the frame drop low\nWatching all my patience turn to dust and snow\nThe heat rises up, the whiskey goes down\nI’m the king of the crash in this digital town\n\n[chorus]\nOh, I’m wishing for that V-RAM, Lord, give me more\nBreak the lock on the core, kick down the door\nPour another shot, let the whiskey flow\nWatch the compute go, watch the compute go\nYeah, the heat is rising but the frame rate’s flat\nI’m begging the gods, how about that?\nGive me more V-RAM, give me more power\nMake it rain down like a golden hour\n\n[verse]\nNeon signs buzzing through the Tennessee haze\nLost in the matrix for these lazy days\nThe 808s thump in the chest of the beast\nServing up failures for the final feast\nI see the green light blink, I see the red line\nRunning out of time and running out of mind\nThe code is tangled, the logic is frayed\nAnother beautiful disaster in the shade\nI take a sip, the ice melts fast\nNothing in this hardware stack is gonna last\n\n[chorus]\nOh, I’m wishing for that V-RAM, Lord, give me more\nBreak the lock on the core, kick down the door\nPour another shot, let the whiskey flow\nWatch the compute go, watch the compute go\nYeah, the heat is rising but the frame rate’s flat\nI’m begging the gods, how about that?\nGive me more V-RAM, give me more power\nMake it rain down like a golden hour\n\n[bridge]\nSilicon valley dreams turn to ash\nMoney can’t buy what you can’t cache\nThe fan is dying, the glass is empty\nMy wallet’s light, my soul is plenty\nLet it burn, let it crash, let it break\nGive me more than I can take"
+      },
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 14,
+      "type": "TextGenerate",
+      "pos": [
+        -210.13921212121275,
+        207.73479415423202
+      ],
+      "size": [
+        357.1590836008472,
+        436
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 22
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "video",
+          "name": "video",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_length",
+          "name": "max_length",
+          "type": "INT",
+          "widget": {
+            "name": "max_length"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "Sampling Mode",
+          "name": "sampling_mode",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "sampling_mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "temperature",
+          "name": "sampling_mode.temperature",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sampling_mode.temperature"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_k",
+          "name": "sampling_mode.top_k",
+          "type": "INT",
+          "widget": {
+            "name": "sampling_mode.top_k"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_p",
+          "name": "sampling_mode.top_p",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sampling_mode.top_p"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "min_p",
+          "name": "sampling_mode.min_p",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sampling_mode.min_p"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "repetition_penalty",
+          "name": "sampling_mode.repetition_penalty",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sampling_mode.repetition_penalty"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "sampling_mode.seed",
+          "type": "INT",
+          "widget": {
+            "name": "sampling_mode.seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "presence_penalty",
+          "name": "sampling_mode.presence_penalty",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "sampling_mode.presence_penalty"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "thinking",
+          "name": "thinking",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "thinking"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "use_default_template",
+          "name": "use_default_template",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "use_default_template"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "mtp",
+          "name": "mtp",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "mtp"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "generated_text",
+          "name": "generated_text",
+          "type": "STRING",
+          "links": [
+            24
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.2",
+        "Node name for S&R": "TextGenerate"
+      },
+      "widgets_values": [
+        "Write YuE2 song lyrics only. No title, no subtitle, no markdown, no commentary. Use exactly these section tags on their own lines: [verse] [chorus] [bridge] [outro]. Two verses and two choruses. Song about a shih tzu with sunglasses who likes to dance",
+        512,
+        "on",
+        0.7,
+        64,
+        0.95,
+        0.05,
+        1.05,
+        0,
+        0,
+        false,
+        true,
+        "auto"
+      ],
+      "widgets_values_named": {
+        "prompt": "Write YuE2 song lyrics only. No title, no subtitle, no markdown, no commentary. Use exactly these section tags on their own lines: [verse] [chorus] [bridge] [outro]. Two verses and two choruses. Song about a shih tzu with sunglasses who likes to dance",
+        "max_length": 512,
+        "sampling_mode": "on",
+        "sampling_mode.temperature": 0.7,
+        "sampling_mode.top_k": 64,
+        "sampling_mode.top_p": 0.95,
+        "sampling_mode.min_p": 0.05,
+        "sampling_mode.repetition_penalty": 1.05,
+        "sampling_mode.seed": 0,
+        "sampling_mode.presence_penalty": 0,
+        "thinking": false,
+        "use_default_template": true,
+        "mtp": "auto"
+      },
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 13,
+      "type": "CLIPLoader",
+      "pos": [
+        -208.2062745031081,
+        56.94263636363574
+      ],
+      "size": [
+        351.54336384126736,
+        106
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip_name",
+          "name": "clip_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "type",
+          "name": "type",
+          "type": "COMBO",
+          "widget": {
+            "name": "type"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "device",
+          "name": "device",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "device"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "CLIP",
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            22
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.2",
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen3vl_4b_bf16.safetensors",
+        "stable_diffusion",
+        "default"
+      ],
+      "widgets_values_named": {
+        "clip_name": "qwen3vl_4b_bf16.safetensors",
+        "type": "stable_diffusion",
+        "device": "default"
+      },
+      "color": "#223",
+      "bgcolor": "#335"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      3,
+      0,
+      "YUE2_MODEL"
+    ],
+    [
+      2,
+      1,
+      0,
+      4,
+      0,
+      "YUE2_MODEL"
+    ],
+    [
+      3,
+      1,
+      1,
+      5,
+      0,
+      "YUE2_VAE"
+    ],
+    [
+      4,
+      2,
+      0,
+      3,
+      2,
+      "STRING"
+    ],
+    [
+      5,
+      2,
+      0,
+      8,
+      1,
+      "STRING"
+    ],
+    [
+      6,
+      2,
+      1,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      7,
+      3,
+      0,
+      4,
+      1,
+      "YUE2_PLAN"
+    ],
+    [
+      8,
+      3,
+      1,
+      8,
+      3,
+      "STRING"
+    ],
+    [
+      9,
+      4,
+      0,
+      5,
+      1,
+      "YUE2_LATENTS"
+    ],
+    [
+      10,
+      5,
+      0,
+      7,
+      0,
+      "AUDIO"
+    ],
+    [
+      11,
+      5,
+      0,
+      8,
+      0,
+      "AUDIO"
+    ],
+    [
+      12,
+      5,
+      0,
+      11,
+      0,
+      "AUDIO"
+    ],
+    [
+      13,
+      6,
+      0,
+      7,
+      1,
+      "STRING"
+    ],
+    [
+      14,
+      6,
+      0,
+      9,
+      2,
+      "STRING"
+    ],
+    [
+      16,
+      6,
+      1,
+      8,
+      4,
+      "STRING"
+    ],
+    [
+      17,
+      7,
+      0,
+      9,
+      0,
+      "AUDIO"
+    ],
+    [
+      18,
+      8,
+      0,
+      9,
+      1,
+      "STRING"
+    ],
+    [
+      20,
+      5,
+      0,
+      12,
+      0,
+      "AUDIO"
+    ],
+    [
+      21,
+      8,
+      0,
+      12,
+      1,
+      "STRING"
+    ],
+    [
+      22,
+      13,
+      0,
+      14,
+      0,
+      "CLIP"
+    ],
+    [
+      24,
+      14,
+      0,
+      2,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9090909090909092,
+      "offset": [
+        423.5691624517912,
+        209.14316297520665
+      ]
+    }
+  },
+  "version": 0.4
+}

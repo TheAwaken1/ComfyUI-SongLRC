@@ -99,6 +99,11 @@ the quickest way to see how the six nodes connect.
 **`example_workflows/yue2_song_to_lrc.json`** is the full pipeline using
 [ComfyUI-FL-YuE2](https://github.com/filliptm/ComfyUI-FL-YuE2).
 
+**`example_workflows/yue2_song_to_lrc_qwen3.json`** adds a local Qwen3-VL model that
+writes the lyrics, so a song idea becomes a finished track with timed lyrics in one
+run. The generated text goes into Lyrics Clean, which feeds both the song model and
+the timing, so the sung words and the timed words cannot drift apart.
+
 **`example_workflows/comfy_yue2_song_to_lrc.json`** is the same pipeline on ComfyUI's
 own YuE2 nodes, so it needs no song node pack at all. The generated ABC score feeds
 the LRC timing here too, so sections land where the music puts them. It is a straight line from lyrics to

@@ -520,7 +520,8 @@ Hold the line tonight"""
     def test_song_workflows_write_exactly_one_lrc_per_run(self):
         """Two savers in one graph means two files with different names."""
         folder = NODE_PATH.parent / "example_workflows"
-        for name in ("yue2_song_to_lrc.json", "comfy_yue2_song_to_lrc.json"):
+        for name in ("yue2_song_to_lrc.json", "comfy_yue2_song_to_lrc.json",
+                     "yue2_song_to_lrc_qwen3.json"):
             with self.subTest(workflow=name):
                 graph = json.loads((folder / name).read_text(encoding="utf-8"))
                 savers = [n["type"] for n in graph["nodes"]
@@ -538,6 +539,30 @@ Hold the line tonight"""
                 continue
             with self.subTest(name=name):
                 self.assertIn(name, seen)
+
+
+    def test_qwen_example_feeds_one_cleaned_lyric_to_both_consumers(self):
+        """The sung words and the timed words must be the same text."""
+        path = NODE_PATH.parent / "example_workflows" / "yue2_song_to_lrc_qwen3.json"
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        by_id = {n["id"]: n for n in graph["nodes"]}
+        types = {n["type"] for n in graph["nodes"]}
+        self.assertIn("TextGenerate", types, "a local Qwen model writes the lyrics")
+        self.assertFalse(types & {"ShowText|pysssss", "SaveText|pysssss"},
+                         "examples should not need another node pack")
+
+        def target(link_id):
+            for link in graph["links"]:
+                if link[0] == link_id:
+                    return by_id[link[3]]["type"]
+            return None
+
+        clean = next(n for n in graph["nodes"] if n["type"] == "SongLyricsClean")
+        self.assertEqual({target(i) for i in clean["outputs"][0]["links"]},
+                         {"FL_YuE2_Plan", "SongLyricsToLRC"})
+        source = next(l for l in graph["links"] if l[0] == clean["inputs"][0]["link"])
+        self.assertEqual(by_id[source[1]]["type"], "TextGenerate",
+                         "the generator connects straight into Lyrics Clean")
 
 
 if __name__ == "__main__":
