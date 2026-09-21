@@ -1,5 +1,7 @@
 # ComfyUI-SongLRC
 
+![ComfyUI-SongLRC](images/icon.png)
+
 Turn generated song lyrics into a timed `.lrc` file that is saved beside the audio,
 with a matching name and counter.
 
