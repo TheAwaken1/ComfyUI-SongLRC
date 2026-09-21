@@ -56,9 +56,13 @@ can be checked without opening the file.
 ### The player
 
 Connect the final `AUDIO` and the LRC to **Music Player (SongLRC)** and run the
-graph. The node plays the song and lights each line as it arrives. Click any line to
-jump to it. A blank cue is an instrumental gap, so the lyrics clear rather than
-leaving a line stuck on screen.
+graph.
+
+Lyrics ride a wheel rather than sitting in a list. The current line holds the centre,
+larger and lit; the lines before and after tilt away on an arc and fade toward the
+edges of the frame, which is masked top and bottom so nothing ends abruptly. Click
+any line to jump to it. A blank cue is an instrumental gap and shows as three dots
+rather than leaving a lyric stuck on screen.
 
 It is the fastest way to judge timing, because a drift of half a second is obvious
 by ear and invisible in a text file. If lines run consistently early or late, adjust
