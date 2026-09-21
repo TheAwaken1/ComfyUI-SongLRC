@@ -1,6 +1,6 @@
 [project]
 name = "comfyui-songlrc"
-description = "Turn generated song lyrics into a timed .lrc file that matches the saved audio. Works with YuE2 and MiniMax Music 3."
+description = "Timed .lrc lyrics for generated songs, saved beside the audio, with a player that highlights each line as it is sung."
 version = "1.0.0"
 license = { file = "LICENSE" }
 readme = "README.md"
