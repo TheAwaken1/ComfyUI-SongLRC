@@ -28,6 +28,18 @@ _META_LINE = re.compile(
 _SEPARATOR = re.compile(r"^[\s*\-_=~#]+$")
 
 
+# Pasting a finished .lrc back in is normal: people keep the file, not the
+# bare lyrics. Strip its timestamps and header tags so the words are not
+# timed a second time on top of the old ones.
+_LRC_TIMESTAMP = re.compile(r"^(?:\[\d{1,3}:\d{1,2}(?:[.,]\d{1,3})?\])+")
+_LRC_TAG = re.compile(r"^\[(ti|ar|al|au|by|length|offset|re|ve)\s*:([^\]]*)\]$", re.I)
+
+
+def strip_lrc_markup(line: str) -> str:
+    """Remove any leading [mm:ss.xx] cues from a pasted lyric line."""
+    return _LRC_TIMESTAMP.sub("", line).strip()
+
+
 def _strip_md(text: str) -> str:
     text = (text or "").strip()
     text = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", text)
@@ -49,6 +61,14 @@ def sanitize_generated_lyrics(raw: str) -> tuple[str, str]:
     seen_section = False
     for raw_line in (raw or "").replace("\r\n", "\n").split("\n"):
         line = raw_line.strip()
+        if not line:
+            continue
+        lrc_tag = _LRC_TAG.match(line)
+        if lrc_tag:
+            if lrc_tag.group(1).lower() == "ti" and not title:
+                title = _strip_md(lrc_tag.group(2))
+            continue
+        line = strip_lrc_markup(line)
         if not line:
             continue
         if _SEPARATOR.match(line):

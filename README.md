@@ -90,7 +90,9 @@ Two examples ship with the pack.
 
 **`example_workflows/any_audio_to_lrc.json`** uses only this pack plus ComfyUI's own
 audio nodes. Point it at any song file, paste that song's lyrics, and it times them,
-saves the LRC and plays it back. Nothing else needs to be installed, which makes it
+saves the LRC and plays it back. Pasting a finished `.lrc` works too: Lyrics Clean
+strips the old timestamps and header tags first, and takes the title from the file,
+so nothing gets timed twice. Nothing else needs to be installed, which makes it
 the quickest way to see how the six nodes connect.
 
 **`example_workflows/yue2_song_to_lrc.json`** is the full pipeline. Load it. It is a straight line from lyrics to

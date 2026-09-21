@@ -439,5 +439,48 @@ Hold the line tonight"""
                 self.assertTrue(item.get("color"), item["type"] + " needs a colour")
 
 
+    def test_pasting_a_finished_lrc_back_in_does_not_double_time_it(self):
+        """People keep the .lrc, not the bare lyrics, and paste that back."""
+        pasted = NEWLINE.join([
+            "[ti:Leave The Radio On]",
+            "[length:02:30.00]",
+            "[by:SongLRC + whisperx audio-align]",
+            "",
+            "[00:13.72]Porch light buzzing over cracked cement",
+            "[00:17.14]Keys still warm from the day",
+            "[00:21.00]",
+            "[01:05.50]Leave the radio on for me",
+        ])
+        lyrics, title = node.sanitize_generated_lyrics(pasted)
+        self.assertEqual(title, "Leave The Radio On", "title comes from the ti tag")
+        self.assertNotIn("[", lyrics, "no timestamps or tags survive")
+        self.assertEqual(lyrics.splitlines(), [
+            "Porch light buzzing over cracked cement",
+            "Keys still warm from the day",
+            "Leave the radio on for me",
+        ])
+
+    def test_lrc_markup_stripping_handles_the_awkward_forms(self):
+        cases = {
+            "[00:13.72]A line": "A line",
+            "[00:13,72]A line": "A line",
+            "[00:13.72][01:20.10]A repeated chorus": "A repeated chorus",
+            "[999:59.999]Long song": "Long song",
+            "A plain line": "A plain line",
+            "[verse]": "[verse]",
+        }
+        for raw, expected in cases.items():
+            with self.subTest(raw=raw):
+                self.assertEqual(node.strip_lrc_markup(raw), expected)
+
+    def test_section_tags_survive_a_pasted_lrc(self):
+        pasted = NEWLINE.join([
+            "[verse]", "[00:01.00]First line", "[chorus]", "[00:05.00]The hook",
+        ])
+        lyrics, _ = node.sanitize_generated_lyrics(pasted)
+        self.assertEqual(lyrics.splitlines(),
+                         ["[verse]", "First line", "[chorus]", "The hook"])
+
+
 if __name__ == "__main__":
     unittest.main()
