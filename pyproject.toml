@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-songlrc"
 description = "Timed .lrc lyrics for generated songs, saved beside the audio, with a player that highlights each line as it is sung."
-version = "1.0.0"
+version = "1.0.1"
 license = { file = "LICENSE" }
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,4 +13,4 @@ Repository = "https://github.com/TheAwaken1/ComfyUI-SongLRC"
 [tool.comfy]
 PublisherId = "theawaken1"
 DisplayName = "ComfyUI-SongLRC"
-Icon = ""
+Icon = "https://raw.githubusercontent.com/TheAwaken1/ComfyUI-SongLRC/main/images/icon.png"
