@@ -46,6 +46,70 @@ function build(node) {
   return root;
 }
 
+function transport(node, player) {
+  const bar = document.createElement("div");
+  bar.style.cssText =
+    "display:flex;align-items:center;gap:10px;flex:0 0 auto;padding:2px 2px 0;";
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = "\u25b6";
+  button.style.cssText =
+    "width:30px;height:30px;flex:0 0 auto;border:0;border-radius:50%;cursor:pointer;" +
+    "color:#ffe2cd;background:rgba(150,47,58,.55);font-size:12px;line-height:30px;" +
+    "box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);transition:background .2s;";
+  button.addEventListener("click", () => {
+    if (player.paused) player.play().catch(() => {});
+    else player.pause();
+  });
+
+  const track = document.createElement("div");
+  track.style.cssText =
+    "position:relative;flex:1 1 auto;height:6px;border-radius:3px;cursor:pointer;" +
+    "background:rgba(255,255,255,.12);overflow:hidden;";
+  const fill = document.createElement("div");
+  fill.style.cssText =
+    "position:absolute;left:0;top:0;bottom:0;width:0%;border-radius:3px;" +
+    "background:linear-gradient(90deg,#8a3d14,#ffb27a);";
+  track.append(fill);
+
+  function seek(event) {
+    const box = track.getBoundingClientRect();
+    if (!box.width || !isFinite(player.duration)) return;
+    const ratio = Math.min(1, Math.max(0, (event.clientX - box.left) / box.width));
+    player.currentTime = ratio * player.duration;
+  }
+  track.addEventListener("pointerdown", (event) => {
+    track.setPointerCapture(event.pointerId);
+    seek(event);
+    const move = (moved) => seek(moved);
+    const stop = () => {
+      track.removeEventListener("pointermove", move);
+      track.removeEventListener("pointerup", stop);
+    };
+    track.addEventListener("pointermove", move);
+    track.addEventListener("pointerup", stop);
+  });
+
+  player.addEventListener("timeupdate", () => {
+    if (!isFinite(player.duration) || !player.duration) return;
+    fill.style.width = ((player.currentTime / player.duration) * 100).toFixed(2) + "%";
+  });
+  player.addEventListener("play", () => {
+    button.textContent = "\u23f8";
+  });
+  player.addEventListener("pause", () => {
+    button.textContent = "\u25b6";
+  });
+  player.addEventListener("ended", () => {
+    button.textContent = "\u25b6";
+  });
+
+  bar.append(button, track);
+  return bar;
+}
+
+
 function styleRow(row, distance, isActive) {
   const away = Math.abs(distance);
   const scale = isActive ? 1.24 : Math.max(0.72, 1 - away * 0.09);
@@ -71,7 +135,7 @@ function render(node, lrcText, audioUrl) {
 
   cues.forEach((cue) => {
     const row = document.createElement("div");
-    row.textContent = cue.text || "· · ·";
+    row.textContent = cue.text || "\u00b7 \u00b7 \u00b7";
     row.style.cssText =
       "height:" + LINE_HEIGHT + "px;line-height:" + LINE_HEIGHT + "px;text-align:center;" +
       "font-size:15px;padding:0 14px;cursor:pointer;white-space:nowrap;overflow:hidden;" +
@@ -119,10 +183,10 @@ app.registerExtension({
       const result = onCreated ? onCreated.apply(this, arguments) : undefined;
       const element = build(this);
       const player = document.createElement("audio");
-      player.controls = true;
+      // No native controls: they carry a clock, and the point here is the words.
       player.preload = "auto";
-      player.style.cssText = "width:100%;flex:0 0 auto;";
-      element.append(player);
+      player.style.display = "none";
+      element.append(player, transport(this, player));
       this._songLrc.player = player;
 
       this.addDOMWidget("player", "div", element, { serialize: false });

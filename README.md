@@ -65,6 +65,10 @@ edges of the frame, which is masked top and bottom so nothing ends abruptly. Cli
 any line to jump to it. A blank cue is an instrumental gap and shows as three dots
 rather than leaving a lyric stuck on screen.
 
+Transport is a play button and a progress bar, with no clock. A running timer pulls
+the eye away from the words, and the wheel already shows where you are in the song.
+Drag the bar to scrub.
+
 It is the fastest way to judge timing, because a drift of half a second is obvious
 by ear and invisible in a text file. If lines run consistently early or late, adjust
 `timing_scale` on Lyrics to LRC, or shift everything with `offset_seconds`.
