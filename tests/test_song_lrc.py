@@ -423,5 +423,21 @@ Hold the line tonight"""
         self.assertNotIn("saved", preview, "the file path is console output, not screen clutter")
 
 
+    def test_audio_only_workflow_uses_the_whole_pack_and_no_song_model(self):
+        """The overview example must run on any audio file, with no generator."""
+        path = NODE_PATH.parent / "example_workflows" / "any_audio_to_lrc.json"
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        types = {n["type"] for n in graph["nodes"]}
+        self.assertEqual({t for t in types if t.startswith("Song")},
+                         {name for name in node.NODE_CLASS_MAPPINGS
+                          if not name.startswith("MiniMax")},
+                         "every node in the pack should appear")
+        self.assertIn("LoadAudio", types, "works from a file, not a song model")
+        self.assertFalse([t for t in types if t.startswith("FL_YuE2")])
+        for item in graph["nodes"]:
+            if item["type"].startswith("Song"):
+                self.assertTrue(item.get("color"), item["type"] + " needs a colour")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,682 @@
+{
+  "id": "c90d5bd6-5440-4c2f-a794-5e3a2ae10c18",
+  "revision": 0,
+  "last_node_id": 8,
+  "last_link_id": 13,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadAudio",
+      "pos": [
+        40,
+        60
+      ],
+      "size": [
+        340,
+        136
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "COMBO",
+          "widget": {
+            "name": "audio"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "AUDIO",
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": [
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "widgets_values": [
+        ""
+      ],
+      "properties": {
+        "Node name for S&R": "LoadAudio"
+      },
+      "widgets_values_named": {
+        "audio": ""
+      },
+      "title": "Any song file"
+    },
+    {
+      "id": 2,
+      "type": "SongLyricsClean",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        360,
+        300
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            4
+          ]
+        },
+        {
+          "localized_name": "title",
+          "name": "title",
+          "type": "STRING",
+          "slot_index": 1,
+          "links": [
+            5
+          ]
+        }
+      ],
+      "widgets_values": [
+        "[verse]\nPorch light buzzing over cracked cement\nKeys still warm from a day that came and went\n[chorus]\nLeave the radio on for me\n[verse]\nEvery road home takes the long way round\n[chorus]\nLeave the radio on for me"
+      ],
+      "properties": {
+        "Node name for S&R": "SongLyricsClean"
+      },
+      "widgets_values_named": {
+        "text": "[verse]\nPorch light buzzing over cracked cement\nKeys still warm from a day that came and went\n[chorus]\nLeave the radio on for me\n[verse]\nEvery road home takes the long way round\n[chorus]\nLeave the radio on for me"
+      },
+      "title": "1. Its lyrics",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 3,
+      "type": "SongFilename",
+      "pos": [
+        450,
+        260
+      ],
+      "size": [
+        320,
+        110
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "title",
+          "name": "title",
+          "type": "STRING",
+          "widget": {
+            "name": "title"
+          },
+          "link": 5
+        },
+        {
+          "localized_name": "folder",
+          "name": "folder",
+          "type": "STRING",
+          "widget": {
+            "name": "folder"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "shape": 7,
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            6,
+            7,
+            8
+          ]
+        },
+        {
+          "localized_name": "safe_title",
+          "name": "safe_title",
+          "type": "STRING",
+          "slot_index": 1,
+          "links": [
+            9
+          ]
+        }
+      ],
+      "widgets_values": [
+        "",
+        "audio/songs"
+      ],
+      "properties": {
+        "Node name for S&R": "SongFilename"
+      },
+      "widgets_values_named": {
+        "title": "",
+        "folder": "audio/songs"
+      },
+      "title": "2. Name the files",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 4,
+      "type": "SongLyricsToLRC",
+      "pos": [
+        830,
+        60
+      ],
+      "size": [
+        360,
+        330
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "widget": {
+            "name": "lyrics"
+          },
+          "link": 4
+        },
+        {
+          "localized_name": "seconds",
+          "name": "seconds",
+          "type": "FLOAT",
+          "widget": {
+            "name": "seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "shape": 7,
+          "link": 1
+        },
+        {
+          "localized_name": "structure",
+          "name": "structure",
+          "type": "STRING",
+          "widget": {
+            "name": "structure"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "title",
+          "name": "title",
+          "type": "STRING",
+          "widget": {
+            "name": "title"
+          },
+          "link": 9
+        },
+        {
+          "localized_name": "artist",
+          "name": "artist",
+          "type": "STRING",
+          "widget": {
+            "name": "artist"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "language",
+          "name": "language",
+          "type": "STRING",
+          "widget": {
+            "name": "language"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "offset_seconds",
+          "name": "offset_seconds",
+          "type": "FLOAT",
+          "widget": {
+            "name": "offset_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "timing_scale",
+          "name": "timing_scale",
+          "type": "FLOAT",
+          "widget": {
+            "name": "timing_scale"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "prefer_alignment",
+          "name": "prefer_alignment",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "prefer_alignment"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "widgets_values": [
+        "",
+        0,
+        "",
+        "",
+        "",
+        "en",
+        0,
+        1,
+        true
+      ],
+      "properties": {
+        "Node name for S&R": "SongLyricsToLRC"
+      },
+      "widgets_values_named": {
+        "lyrics": "",
+        "seconds": 0,
+        "structure": "",
+        "title": "",
+        "artist": "",
+        "language": "en",
+        "offset_seconds": 0,
+        "timing_scale": 1,
+        "prefer_alignment": true
+      },
+      "title": "3. Time them to the audio",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 5,
+      "type": "SaveAudioAdvanced",
+      "pos": [
+        1240,
+        60
+      ],
+      "size": [
+        300,
+        140
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 2
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": 6
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audioUI",
+          "name": "audioUI",
+          "type": "AUDIO_UI",
+          "widget": {
+            "name": "audioUI"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": [
+            13
+          ]
+        }
+      ],
+      "widgets_values": [
+        "audio/songs/song",
+        "mp3",
+        "V0"
+      ],
+      "properties": {
+        "Node name for S&R": "SaveAudioAdvanced"
+      },
+      "widgets_values_named": {
+        "filename_prefix": "audio/songs/song",
+        "format": "mp3",
+        "format.quality": "V0"
+      }
+    },
+    {
+      "id": 6,
+      "type": "SongSaveMatchingLRC",
+      "pos": [
+        1600,
+        60
+      ],
+      "size": [
+        300,
+        82
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 13
+        },
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "link": 10
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": null
+        }
+      ],
+      "widgets_values": [],
+      "properties": {
+        "Node name for S&R": "SongSaveMatchingLRC"
+      },
+      "widgets_values_named": {},
+      "title": "4a. LRC beside the audio",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 7,
+      "type": "SongSaveLRC",
+      "pos": [
+        1600,
+        200
+      ],
+      "size": [
+        300,
+        82
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "link": 11
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "path",
+          "name": "path",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": null
+        }
+      ],
+      "widgets_values": [
+        "audio/songs/lyrics"
+      ],
+      "properties": {
+        "Node name for S&R": "SongSaveLRC"
+      },
+      "widgets_values_named": {
+        "filename_prefix": "audio/songs/lyrics"
+      },
+      "title": "4b. LRC on its own",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 8,
+      "type": "SongMusicPlayer",
+      "pos": [
+        1240,
+        330
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 3
+        },
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": null
+        }
+      ],
+      "widgets_values": [],
+      "properties": {
+        "Node name for S&R": "SongMusicPlayer"
+      },
+      "widgets_values_named": {},
+      "title": "5. Listen with the lyrics",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      2,
+      "AUDIO"
+    ],
+    [
+      2,
+      1,
+      0,
+      5,
+      0,
+      "AUDIO"
+    ],
+    [
+      3,
+      1,
+      0,
+      8,
+      0,
+      "AUDIO"
+    ],
+    [
+      4,
+      2,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      5,
+      2,
+      1,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      6,
+      3,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      7,
+      3,
+      0,
+      6,
+      2,
+      "STRING"
+    ],
+    [
+      8,
+      3,
+      0,
+      7,
+      1,
+      "STRING"
+    ],
+    [
+      9,
+      3,
+      1,
+      4,
+      4,
+      "STRING"
+    ],
+    [
+      10,
+      4,
+      0,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      11,
+      4,
+      0,
+      7,
+      0,
+      "STRING"
+    ],
+    [
+      12,
+      4,
+      0,
+      8,
+      1,
+      "STRING"
+    ],
+    [
+      13,
+      5,
+      0,
+      6,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

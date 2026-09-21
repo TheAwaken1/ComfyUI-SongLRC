@@ -80,7 +80,16 @@ body, so a SongLRC chain is recognisable at a glance among other node packs.
 
 ## Using it
 
-Load `example_workflows/yue2_song_to_lrc.json`. It is a straight line from lyrics to
+![The SongLRC nodes wired together](images/songlrc-nodes.png)
+
+Two examples ship with the pack.
+
+**`example_workflows/any_audio_to_lrc.json`** uses only this pack plus ComfyUI's own
+audio nodes. Point it at any song file, paste that song's lyrics, and it times them,
+saves the LRC and plays it back. Nothing else needs to be installed, which makes it
+the quickest way to see how the six nodes connect.
+
+**`example_workflows/yue2_song_to_lrc.json`** is the full pipeline. Load it. It is a straight line from lyrics to
 a finished song with a matching LRC, using only this pack, FL-YuE2 and ComfyUI's own
 audio nodes.
 
