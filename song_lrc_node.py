@@ -33,11 +33,14 @@ _SEPARATOR = re.compile(r"^[\s*\-_=~#]+$")
 # timed a second time on top of the old ones.
 _LRC_TIMESTAMP = re.compile(r"^(?:\[\d{1,3}:\d{1,2}(?:[.,]\d{1,3})?\])+")
 _LRC_TAG = re.compile(r"^\[(ti|ar|al|au|by|length|offset|re|ve)\s*:([^\]]*)\]$", re.I)
+# Enhanced LRC puts a <mm:ss.xx> tag in front of every sung word.
+_LRC_WORD_TAG = re.compile(r"<\d{1,3}:\d{1,2}(?:[.,]\d{1,3})?>")
 
 
 def strip_lrc_markup(line: str) -> str:
-    """Remove any leading [mm:ss.xx] cues from a pasted lyric line."""
-    return _LRC_TIMESTAMP.sub("", line).strip()
+    """Remove leading [mm:ss.xx] cues and <mm:ss.xx> word tags from a pasted line."""
+    line = _LRC_WORD_TAG.sub("", _LRC_TIMESTAMP.sub("", line))
+    return re.sub(r"\s+", " ", line).strip()
 
 
 def _strip_md(text: str) -> str:
@@ -566,11 +569,12 @@ def _word_tokens(text: str) -> list[str]:
     return re.findall(r"[^\W_]+(?:'[^\W_]+)*", text, re.UNICODE)
 
 
-def _line_evidence(result: dict, lines: list[str]) -> list[tuple[float | None, float | None, int]]:
-    """Map WhisperX words back to lyric lines without losing untimed words.
+def _token_matches(result: dict, lines: list[str]) -> tuple[list[int], list[dict | None]]:
+    """Pair every expected lyric token with the WhisperX word that sang it.
 
-    WhisperX returns the supplied words in order, but some have no timestamp.
-    Skipping those words shifts every later line in a count-based/greedy mapper.
+    Returns the owning line of each expected token and the matched word, or
+    None. WhisperX returns the supplied words in order, but some have no
+    timestamp; matching on sequence keeps those gaps from shifting later lines.
     """
     expected = []
     owners = []
@@ -588,21 +592,95 @@ def _line_evidence(result: dict, lines: list[str]) -> list[tuple[float | None, f
                 observed.append(token)
                 timed.append(word)
 
+    hits: list[dict | None] = [None] * len(expected)
+    for block in SequenceMatcher(None, expected, observed, autojunk=False).get_matching_blocks():
+        for k in range(block.size):
+            hits[block.a + k] = timed[block.b + k]
+    return owners, hits
+
+
+def _line_evidence(result: dict, lines: list[str]) -> list[tuple[float | None, float | None, int]]:
+    """Map WhisperX words back to lyric lines without losing untimed words."""
+    owners, hits = _token_matches(result, lines)
     starts = [None] * len(lines)
     ends = [None] * len(lines)
     counts = [0] * len(lines)
-    for block in SequenceMatcher(None, expected, observed, autojunk=False).get_matching_blocks():
-        for k in range(block.size):
-            owner = owners[block.a + k]
-            word = timed[block.b + k]
-            if word.get("start") is None:
-                continue
-            start = float(word["start"])
-            end = float(word.get("end") or start)
-            starts[owner] = start if starts[owner] is None else min(starts[owner], start)
-            ends[owner] = end if ends[owner] is None else max(ends[owner], end)
-            counts[owner] += 1
+    for owner, word in zip(owners, hits):
+        if word is None or word.get("start") is None:
+            continue
+        start = float(word["start"])
+        end = float(word.get("end") or start)
+        starts[owner] = start if starts[owner] is None else min(starts[owner], start)
+        ends[owner] = end if ends[owner] is None else max(ends[owner], end)
+        counts[owner] += 1
     return list(zip(starts, ends, counts))
+
+
+def _word_starts(result: dict, lines: list[str]) -> list[list[float | None]]:
+    """Start time of each space-separated word of each line, None if untimed.
+
+    A display word can hold several tokens ("rock-n-roll"); it starts with the
+    first of them that WhisperX timed.
+    """
+    _owners, hits = _token_matches(result, lines)
+    cursor = 0
+    out = []
+    for line in lines:
+        row = []
+        for chunk in line.split():
+            size = len(_word_tokens(chunk))
+            start = None
+            for word in hits[cursor:cursor + size]:
+                if word is not None and word.get("start") is not None:
+                    start = float(word["start"])
+                    break
+            row.append(start)
+            cursor += size
+        out.append(row)
+    return out
+
+
+def _stamp(seconds: float) -> str:
+    return f"{int(seconds // 60):02d}:{seconds % 60:05.2f}"
+
+
+def _word_tagged(line: str, times: list[float | None], start: float, end: float,
+                 limit: float) -> str | None:
+    """Enhanced-LRC body for one line: a <mm:ss.xx> tag before every word.
+
+    Words WhisperX missed are interpolated between their timed neighbours so
+    the karaoke fill never runs backwards, and a closing tag marks where the
+    last word ends. Returns None when nothing in the line was timed.
+    """
+    chunks = line.split()
+    if not chunks or len(times) != len(chunks):
+        return None
+    known = [i for i, t in enumerate(times) if t is not None]
+    if not known:
+        return None
+    filled = list(times)
+    first = known[0]
+    for j in range(first):
+        filled[j] = start + (filled[first] - start) * j / first
+    for a, b in zip(known, known[1:]):
+        for j in range(a + 1, b):
+            filled[j] = filled[a] + (filled[b] - filled[a]) * (j - a) / (b - a)
+    for j in range(known[-1] + 1, len(filled)):
+        filled[j] = filled[known[-1]] + 0.3 * (j - known[-1])
+
+    ceiling = max(start, limit - 0.02)
+    stamps = []
+    previous = start
+    for t in filled:
+        t = min(max(t, previous), ceiling)
+        stamps.append(t)
+        previous = t
+    stamps[0] = start
+    body = " ".join(f"<{_stamp(t)}>{chunk}" for t, chunk in zip(stamps, chunks))
+    finish = min(max(end, stamps[-1]), ceiling)
+    if finish > stamps[-1] + 0.05:
+        body += f"<{_stamp(finish)}>"
+    return body
 
 
 def _collapsed_run(starts: list[float | None], lines: list[str]) -> int | None:
@@ -686,7 +764,8 @@ def _fill_missing_times(lines: list[str], evidence: list[tuple[float | None, flo
 
 def _lrc_from_evidence(lines: list[str], evidence: list[tuple[float | None, float | None, int]],
                        seconds: float, title: str, artist: str, offset: float,
-                       scale: float = 1.0) -> str:
+                       scale: float = 1.0,
+                       words: list[list[float | None]] | None = None) -> str:
     header = [f"[ti:{title}]"]
     if str(artist or "").strip():
         header.append(f"[ar:{artist}]")
@@ -704,8 +783,14 @@ def _lrc_from_evidence(lines: list[str], evidence: list[tuple[float | None, floa
             start = min(seconds, entries[-1][1] + _MIN_LINE_GAP)
         entries.append((line, start, max(start, min(seconds, end))))
     for i, (line, start, end) in enumerate(entries):
-        header.append(f"[{int(start // 60):02d}:{start % 60:05.2f}]{line}")
         next_start = entries[i + 1][1] if i + 1 < len(entries) else seconds
+        body = None
+        if words and i < len(words):
+            # Word times get the same scale and offset as the line times.
+            placed = [None if t is None else max(0.0, min(seconds, t * scale + offset))
+                      for t in words[i]]
+            body = _word_tagged(line, placed, start, end, next_start)
+        header.append(f"[{int(start // 60):02d}:{start % 60:05.2f}]{body or line}")
         # The bundled MusicPlayer accepts empty LRC entries; clear a line
         # during a long instrumental break instead of leaving it "stuck".
         if next_start - end > 5.0:
@@ -765,6 +850,12 @@ class SongLyricsToLRC:
                     "tooltip": "Stretch timestamps if lyrics feel early/fast (>1) or late/slow (<1)."
                 }),
                 "prefer_alignment": ("BOOLEAN", {"default": True}),
+                "word_timing": ("BOOLEAN", {
+                    "default": True,
+                    "tooltip": "With WhisperX alignment, also write a <mm:ss.xx> tag before every word "
+                               "(enhanced LRC) so the player fills each line word by word, karaoke style. "
+                               "Turn off for players that show the tags as text."
+                }),
             }
         }
 
@@ -823,7 +914,8 @@ class SongLyricsToLRC:
 
     def _align_with_whisperx(self, audio_path: str, lyrics: str, language: str, offset: float,
                              title: str, artist: str, seconds: float,
-                             structure: str = "", scale: float = 1.0):
+                             structure: str = "", scale: float = 1.0,
+                             word_timing: bool = True):
         try:
             import whisperx
             import torch
@@ -877,6 +969,7 @@ class SongLyricsToLRC:
                 "text": joined,
             }], "full-span")
             evidence = _line_evidence(result, display_lines)
+            words = _word_starts(result, display_lines)
             starts = [entry[0] for entry in evidence]
             collapse = _collapsed_run(starts, display_lines)
             observed = sum(start is not None for start in starts)
@@ -892,6 +985,7 @@ class SongLyricsToLRC:
                       f"compressed at {starts[collapse]:.1f}s")
                 display_lines = display_lines[:collapse]
                 evidence = evidence[:collapse]
+                words = words[:collapse]
                 trimmed = True
             elif collapse is not None or reversed_time or observed < len(display_lines):
                 print("[SongLRC] Full-span timing unreliable; retrying bounded line windows")
@@ -908,9 +1002,15 @@ class SongLyricsToLRC:
                 result = run_align(segs, "wide-window")
                 aligned = result.get("segments") or []
                 retried = []
+                words = []
                 for i, line in enumerate(display_lines):
-                    item = _line_evidence({"segments": [aligned[i]]}, [line])[0] if i < len(aligned) else (None, None, 0)
-                    retried.append(item)
+                    if i < len(aligned):
+                        segment = {"segments": [aligned[i]]}
+                        retried.append(_line_evidence(segment, [line])[0])
+                        words.append(_word_starts(segment, [line])[0])
+                    else:
+                        retried.append((None, None, 0))
+                        words.append([None] * len(line.split()))
                 evidence = retried
 
             if not display_lines or not any(item[0] is not None for item in evidence):
@@ -924,7 +1024,7 @@ class SongLyricsToLRC:
                 print("[SongLRC] Alignment still unreliable; using complete timing fallback")
                 return None
             lrc = _lrc_from_evidence(display_lines, evidence, seconds, title, artist,
-                                     offset, scale)
+                                     offset, scale, words if word_timing else None)
             if not lrc:
                 print("[SongLRC] Alignment produced no usable lines; using fallback")
                 return None
@@ -960,7 +1060,8 @@ class SongLyricsToLRC:
 
     def make_lrc(self, lyrics, seconds, audio=None, structure="", title="Generated Song",
                  artist="", language="en",
-                 offset_seconds=0.0, timing_scale=1.0, prefer_alignment=True, **kwargs):
+                 offset_seconds=0.0, timing_scale=1.0, prefer_alignment=True,
+                 word_timing=True, **kwargs):
 
         # Defensive: ComfyUI sometimes shuffles optional args
         if not isinstance(language, str) or language.lower() in ("true", "false") or len(str(language)) < 2:
@@ -1000,6 +1101,7 @@ class SongLyricsToLRC:
                         title, artist, seconds,
                         structure=structure or "",
                         scale=float(timing_scale or 1.0),
+                        word_timing=bool(word_timing),
                     )
                     if aligned:
                         return (aligned,)
@@ -1194,6 +1296,181 @@ class SongSaveLRC:
         # Show the timed lyrics on the node, not just where they went.
         print(f"[SongLRC] Saved LRC: {relative}")
         return {"ui": {"text": [str(lrc)], "saved": [relative]}, "result": (relative,)}
+
+
+# Lyric video export. The browser uploads its video here in pieces (ComfyUI
+# caps a single request at about 100 MB). Normally that is a stream of frames
+# rendered offline, which encode_video turns into an H.264 + AAC MP4 with the
+# song's own audio. The real-time fallback uploads a finished recording, which
+# finalize_video copies into a regular file: browser recorders write
+# streaming-style files whose length some players misread, often showing only
+# the first second or two.
+
+_UPLOAD_ID = re.compile(r"^[0-9a-f]{32}$")
+_MAX_VIDEO_BYTES = 4 * 1024 ** 3
+_VIDEO_FOLDER = "video/SongLRC"
+
+
+def _video_upload_path(temp_dir: str, upload_id: str) -> str:
+    if not _UPLOAD_ID.match(str(upload_id or "")):
+        raise ValueError("Bad upload id")
+    return os.path.join(temp_dir, f"songlrc_video_{upload_id}.part")
+
+
+def append_video_part(temp_dir: str, upload_id: str, index: int, data: bytes) -> int:
+    """Add one piece of an upload; piece 0 starts the file afresh. Returns the size so far."""
+    path = _video_upload_path(temp_dir, upload_id)
+    os.makedirs(temp_dir, exist_ok=True)
+    so_far = os.path.getsize(path) if index and os.path.exists(path) else 0
+    if index and not so_far:
+        raise ValueError("Upload pieces arrived out of order")
+    if so_far + len(data) > _MAX_VIDEO_BYTES:
+        raise ValueError("Video is too large")
+    with open(path, "ab" if index else "wb") as handle:
+        handle.write(data)
+    return so_far + len(data)
+
+
+def _remux(source: str, target: str, container: str) -> None:
+    """Copy the streams into a fresh file without re-encoding."""
+    import av
+
+    options = {"movflags": "+faststart"} if container == "mp4" else {}
+    with av.open(source) as src, av.open(target, "w", format=container, options=options) as out:
+        streams = [s for s in src.streams if s.type in ("video", "audio")]
+        mapping = {s.index: out.add_stream_from_template(s) for s in streams}
+        for packet in src.demux(*streams):
+            if packet.dts is None:
+                continue
+            packet.stream = mapping[packet.stream.index]
+            out.mux(packet)
+
+
+def _uploaded(temp_dir: str, upload_id: str) -> str:
+    source = _video_upload_path(temp_dir, upload_id)
+    if not os.path.exists(source) or not os.path.getsize(source):
+        raise ValueError("Nothing was uploaded")
+    return source
+
+
+def _next_video_path(output_root: str, title: str, extension: str) -> tuple[str, str]:
+    """output/video/SongLRC/<title>_NNNNN.<ext>, numbered past what is there."""
+    folder = os.path.join(os.path.abspath(output_root), *_VIDEO_FOLDER.split("/"))
+    os.makedirs(folder, exist_ok=True)
+    stem = safe_song_title(title)
+    pattern = re.compile(rf"^{re.escape(stem)}_(\d{{5}})\.(?:mp4|webm)$", re.IGNORECASE)
+    used = [int(match.group(1)) for name in os.listdir(folder)
+            for match in [pattern.match(name)] if match]
+    filename = f"{stem}_{(max(used) + 1 if used else 1):05d}.{extension}"
+    return filename, os.path.join(folder, filename)
+
+
+def encode_video(temp_dir: str, output_root: str, upload_id: str, title: str, kind: str,
+                 fps: int, audio_path: str | None) -> tuple[str, str]:
+    """Frames rendered in the browser plus the song's audio -> an H.264 + AAC MP4.
+
+    kind is "h264" (an Annex B stream) or "ivf" (VP8 / VP9). The frames carry
+    no timestamps of their own; they are numbered at `fps`. Returns
+    (subfolder, filename) relative to the output folder.
+    """
+    import av
+    from fractions import Fraction
+
+    formats = {"h264": "h264", "ivf": "ivf"}
+    if kind not in formats:
+        raise ValueError("Unknown video stream")
+    fps = int(fps)
+    if not 1 <= fps <= 120:
+        raise ValueError("Bad frame rate")
+    source = _uploaded(temp_dir, upload_id)
+    filename, target = _next_video_path(output_root, title, "mp4")
+    rate = 48000
+    try:
+        with av.open(source, format=formats[kind]) as frames_in, \
+                av.open(target, "w", format="mp4", options={"movflags": "+faststart"}) as out:
+            video = out.add_stream("libx264", rate=fps)
+            video.pix_fmt = "yuv420p"
+            video.options = {"crf": "18", "preset": "veryfast"}
+            sound = None
+            if audio_path:
+                sound = out.add_stream("aac", rate=rate, layout="stereo")
+                sound.bit_rate = 192000
+
+            count = 0
+            for count, image in enumerate(frames_in.decode(video=0)):
+                if count == 0:
+                    video.width, video.height = image.width, image.height
+                image = image.reformat(format="yuv420p")
+                image.pts = count
+                image.time_base = Fraction(1, fps)
+                for packet in video.encode(image):
+                    out.mux(packet)
+            for packet in video.encode():
+                out.mux(packet)
+
+            if sound is not None:
+                from av.audio.fifo import AudioFifo
+
+                resampler = av.AudioResampler(format="fltp", layout="stereo", rate=rate)
+                fifo = AudioFifo()
+                written = 0
+
+                def drain(final):
+                    nonlocal written
+                    size = sound.codec_context.frame_size or 1024
+                    while fifo.samples >= size or (final and fifo.samples):
+                        chunk = fifo.read(min(size, fifo.samples))
+                        chunk.pts = written
+                        chunk.time_base = Fraction(1, rate)
+                        written += chunk.samples
+                        for packet in sound.encode(chunk):
+                            out.mux(packet)
+
+                with av.open(audio_path) as song:
+                    for piece in song.decode(audio=0):
+                        piece.pts = None
+                        for converted in resampler.resample(piece):
+                            fifo.write(converted)
+                        drain(False)
+                for converted in resampler.resample(None):
+                    fifo.write(converted)
+                drain(True)
+                for packet in sound.encode():
+                    out.mux(packet)
+    except Exception:
+        if os.path.exists(target):
+            os.remove(target)
+        raise
+    finally:
+        if os.path.exists(source):
+            os.remove(source)
+    print(f"[SongLRC] Saved lyric video: {_VIDEO_FOLDER}/{filename} ({count + 1} frames)")
+    return _VIDEO_FOLDER, filename
+
+
+def finalize_video(temp_dir: str, output_root: str, upload_id: str, title: str,
+                   extension: str) -> tuple[str, str]:
+    """Turn a finished real-time recording into output/video/SongLRC/<title>_NNNNN.<ext>.
+
+    Returns (subfolder, filename) relative to the output folder. If the copy
+    fails, the upload is kept as recorded rather than lost.
+    """
+    extension = str(extension or "").lower()
+    if extension not in ("mp4", "webm"):
+        raise ValueError("Unknown video type")
+    source = _uploaded(temp_dir, upload_id)
+    filename, target = _next_video_path(output_root, title, extension)
+
+    try:
+        _remux(source, target, extension)
+        os.remove(source)
+    except Exception as error:
+        print(f"[SongLRC] Could not tidy the video ({error}); keeping it as recorded")
+        if os.path.exists(target):
+            os.remove(target)
+        os.replace(source, target)
+    print(f"[SongLRC] Saved lyric video: {_VIDEO_FOLDER}/{filename}")
+    return _VIDEO_FOLDER, filename
 
 
 class SongMusicPlayer:

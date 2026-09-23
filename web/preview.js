@@ -7,12 +7,15 @@ import { parseLrc } from "./lrc.js";
 const SHOWS_LRC = ["SongSaveLRC", "SongSaveMatchingLRC"];
 
 const TIMED = /^\[\d/;
+// Word tags make the file karaoke-ready but unreadable on the node.
+const WORD_TAG = /<\d{1,3}:\d{1,2}(?:[.,]\d{1,3})?>/g;
 
 function tidy(text) {
   const { title } = parseLrc(text);
   const body = String(text || "")
     .split(/\r?\n/)
     .filter((line) => TIMED.test(line.trim()))
+    .map((line) => line.trim().replace(WORD_TAG, "").replace(/\s+/g, " "))
     .join("\n");
   return (title || "Untitled") + "\n\n" + body;
 }

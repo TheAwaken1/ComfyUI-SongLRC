@@ -64,6 +64,35 @@ class SongLRCTimingTests(unittest.TestCase):
         self.assertEqual([part[0] for part in evidence], [1.0, 4.0, 8.0])
         self.assertEqual([part[2] for part in evidence], [3, 2, 4])
 
+    def test_word_tags_follow_the_sung_words(self):
+        lines = ["Hold on to me", "I still believe"]
+        words = [
+            ("Hold", 1.0, 1.1), ("on", 1.2, 1.4), ("to", None, None), ("me", 1.7, 2.2),
+            ("I", 4.0, 4.2), ("still", None, None), ("believe", 4.7, 5.5),
+        ]
+        result = {"segments": [{"words": [
+            {"word": word, "start": start, "end": end} for word, start, end in words
+        ]}]}
+        evidence = node._line_evidence(result, lines)
+        starts = node._word_starts(result, lines)
+        self.assertEqual(starts, [[1.0, 1.2, None, 1.7], [4.0, None, 4.7]])
+        lrc = node._lrc_from_evidence(lines, evidence, 30.0, "Song", "", 0.0, words=starts)
+        self.assertIn("[00:01.00]<00:01.00>Hold <00:01.20>on <00:01.45>to <00:01.70>me<00:02.20>",
+                      lrc, "a missed word sits between its neighbours; the end is tagged")
+        self.assertIn("[00:04.00]<00:04.00>I <00:04.35>still <00:04.70>believe<00:05.50>", lrc)
+
+    def test_word_tags_get_the_same_offset_and_scale_as_lines(self):
+        evidence = [(10.0, 11.0, 2)]
+        lrc = node._lrc_from_evidence(["Two words"], evidence, 40.0, "Song", "", 1.0, 1.1,
+                                      words=[[10.0, 10.5]])
+        self.assertIn("[00:12.00]<00:12.00>Two <00:12.55>words<00:13.10>", lrc)
+
+    def test_no_word_timing_keeps_plain_lines(self):
+        evidence = [(1.0, 2.0, 2)]
+        lrc = node._lrc_from_evidence(["Plain line"], evidence, 30.0, "Song", "", 0.0)
+        self.assertIn("[00:01.00]Plain line\n", lrc)
+        self.assertNotIn("<", lrc)
+
     def test_catches_compressed_tail_at_slow_medium_and_fast_tempo(self):
         lines = ["One more line of singing"] * 10
         for step in (1.1, 2.6, 5.2):
@@ -384,12 +413,13 @@ Hold the line tonight"""
         if not node_exe:
             self.skipTest("node is not available")
         script = (
-            "import { parseLrc, activeCue } from './lrc.js';"
+            "import { parseLrc, activeCue, formatClock } from './lrc.js';"
             "const lines = ['[ti:Song Name]','[length:02:30.00]','[by:SongLRC]','',"
             "'[00:13.72]First line','[00:17.14]Second line','[00:21.00]','[01:05.50]Later'];"
             "const { cues, title } = parseLrc(lines.join(String.fromCharCode(10)));"
             "const shape = [title, cues.length, cues[2].text === '',"
-            "activeCue(cues, 0), activeCue(cues, 18), activeCue(cues, 22), activeCue(cues, 70)];"
+            "activeCue(cues, 0), activeCue(cues, 18), activeCue(cues, 22), activeCue(cues, 70),"
+            "formatClock(0), formatClock(65.9), formatClock(NaN), formatClock(754)];"
             "console.log(JSON.stringify(shape));"
         )
         output = subprocess.run(
@@ -398,8 +428,124 @@ Hold the line tonight"""
         )
         self.assertEqual(output.returncode, 0, output.stderr)
         self.assertEqual(json.loads(output.stdout.strip()),
-                         ["Song Name", 4, True, -1, 1, 2, 3])
+                         ["Song Name", 4, True, -1, 1, 2, 3,
+                          "0:00", "1:05", "0:00", "12:34"])
 
+
+    def test_word_tags_parse_in_the_browser(self):
+        node_exe = shutil.which("node")
+        if not node_exe:
+            self.skipTest("node is not available")
+        script = (
+            "import { parseLrc, wordProgress } from './lrc.js';"
+            "const text = ['[ti:Song]','[length:00:30.00]','',"
+            "'[00:01.00]<00:01.00>Hold <00:01.50>on<00:02.00>','[00:04.00]Plain line'"
+            "].join(String.fromCharCode(10));"
+            "const { cues } = parseLrc(text);"
+            "const first = cues[0];"
+            "console.log(JSON.stringify([first.text, first.words.length, first.end,"
+            "cues[1].words, cues[1].text, wordProgress(first, 4, 1.75)]));"
+        )
+        output = subprocess.run(
+            [node_exe, "--input-type=module", "-e", script],
+            cwd=NODE_PATH.parent / "web", capture_output=True, text=True, timeout=60,
+        )
+        self.assertEqual(output.returncode, 0, output.stderr)
+        self.assertEqual(json.loads(output.stdout.strip()),
+                         ["Hold on", 2, 2.0, None, "Plain line", [1, 0.5]])
+
+    def test_exported_video_is_saved_as_a_regular_file_with_its_length(self):
+        """Browser recorders write fragmented files that players cut short."""
+        try:
+            import av
+        except ImportError:
+            self.skipTest("PyAV is not available")
+        import numpy as np
+
+        with tempfile.TemporaryDirectory() as root:
+            temp_dir = os.path.join(root, "temp")
+            recorded = os.path.join(root, "recorded.mp4")
+            # Three seconds at 10 fps, fragmented the way MediaRecorder writes it.
+            with av.open(recorded, "w", format="mp4",
+                         options={"movflags": "frag_keyframe+empty_moov"}) as out:
+                stream = out.add_stream("mpeg4", rate=10)
+                stream.width, stream.height, stream.pix_fmt = 64, 48, "yuv420p"
+                for i in range(30):
+                    frame = av.VideoFrame.from_ndarray(
+                        np.full((48, 64, 3), i * 8, dtype=np.uint8), format="rgb24")
+                    for packet in stream.encode(frame):
+                        out.mux(packet)
+                for packet in stream.encode():
+                    out.mux(packet)
+            data = Path(recorded).read_bytes()
+            self.assertIn(b"moof", data, "the fixture really is fragmented")
+
+            upload = "ab" * 16
+            half = len(data) // 2
+            node.append_video_part(temp_dir, upload, 0, data[:half])
+            self.assertEqual(node.append_video_part(temp_dir, upload, 1, data[half:]), len(data))
+            subfolder, name = node.finalize_video(temp_dir, os.path.join(root, "out"), upload,
+                                                  'My: Song?', "mp4")
+            self.assertEqual((subfolder, name), ("video/SongLRC", "My Song_00001.mp4"))
+            saved = os.path.join(root, "out", "video", "SongLRC", name)
+            self.assertNotIn(b"moof", Path(saved).read_bytes(), "rewritten as a regular MP4")
+            with av.open(saved) as check:
+                self.assertAlmostEqual(check.duration / 1e6, 3.0, delta=0.2)
+                self.assertEqual(sum(1 for _ in check.decode(video=0)), 30)
+            self.assertFalse(os.listdir(temp_dir), "the upload is cleaned up")
+
+            with self.assertRaises(ValueError):
+                node.append_video_part(temp_dir, "../escape", 0, b"x")
+            with self.assertRaises(ValueError):
+                node.finalize_video(temp_dir, root, upload, "Song", "exe")
+
+    def test_rendered_frames_and_song_become_one_mp4(self):
+        """The offline export uploads bare frames; ComfyUI adds the audio."""
+        try:
+            import av
+        except ImportError:
+            self.skipTest("PyAV is not available")
+        import numpy as np
+
+        with tempfile.TemporaryDirectory() as root:
+            temp_dir = os.path.join(root, "temp")
+            # A bare H.264 stream, as WebCodecs writes it: no container, no timestamps.
+            stream_path = os.path.join(root, "frames.h264")
+            with av.open(stream_path, "w", format="h264") as out:
+                video = out.add_stream("libx264", rate=10)
+                video.width, video.height, video.pix_fmt = 64, 48, "yuv420p"
+                for i in range(20):
+                    frame = av.VideoFrame.from_ndarray(
+                        np.full((48, 64, 3), i * 10, dtype=np.uint8), format="rgb24")
+                    frame.pts = i
+                    for packet in video.encode(frame):
+                        out.mux(packet)
+                for packet in video.encode():
+                    out.mux(packet)
+            song = os.path.join(root, "song.wav")
+            with av.open(song, "w", format="wav") as out:
+                audio = out.add_stream("pcm_s16le", rate=44100, layout="mono")
+                tone = (np.sin(np.arange(88200) / 44100 * 2 * np.pi * 220) * 8000).astype(np.int16)
+                frame = av.AudioFrame.from_ndarray(tone[None, :], format="s16", layout="mono")
+                frame.sample_rate = 44100
+                for packet in audio.encode(frame):
+                    out.mux(packet)
+                for packet in audio.encode():
+                    out.mux(packet)
+
+            upload = "cd" * 16
+            node.append_video_part(temp_dir, upload, 0, Path(stream_path).read_bytes())
+            subfolder, name = node.encode_video(temp_dir, os.path.join(root, "out"), upload,
+                                                "Test Song", "h264", 10, song)
+            self.assertEqual((subfolder, name), ("video/SongLRC", "Test Song_00001.mp4"))
+            with av.open(os.path.join(root, "out", subfolder, name)) as check:
+                kinds = {s.type: s.codec_context.name for s in check.streams}
+                self.assertEqual(kinds, {"video": "h264", "audio": "aac"})
+                self.assertAlmostEqual(check.duration / 1e6, 2.0, delta=0.15)
+                self.assertEqual(sum(1 for _ in check.decode(video=0)), 20)
+            self.assertFalse(os.listdir(temp_dir), "the upload is cleaned up")
+            with self.assertRaises(ValueError):
+                node.encode_video(temp_dir, root, upload, "Song", "gif", 10, song)
 
     def test_derived_titles_do_not_end_on_a_fragment(self):
         """A fixed word cut produced titles like 'Oh I Am Wishing For That V'."""
@@ -468,6 +614,7 @@ Hold the line tonight"""
             "[00:13.72][01:20.10]A repeated chorus": "A repeated chorus",
             "[999:59.999]Long song": "Long song",
             "A plain line": "A plain line",
+            "[00:13.72]<00:13.72>Word <00:14.10>by <00:14.50>word<00:15.00>": "Word by word",
             "[verse]": "[verse]",
         }
         for raw, expected in cases.items():

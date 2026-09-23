@@ -23,7 +23,9 @@ This pack was previously called **ComfyUI-MiniMaxLRC**. See Migrating below.
 - A song title taken from a `Title:` line, or derived from the repeated hook
 - Audio and LRC written with the identical name and five digit counter
 - A standalone LRC saver too, so the pack needs no other node packs
-- A player that scrolls the lyrics against the audio, so timing is checked by ear
+- Word-by-word karaoke timing (enhanced LRC) from the same alignment
+- A player that scrolls the lyrics against the audio, so timing is checked by ear,
+  and exports a lyric video in one click
 - ComfyUI's own Save Audio (Advanced) keeps working, so FLAC, MP3 and Opus
   quality controls are untouched
 
@@ -67,13 +69,58 @@ edges of the frame, which is masked top and bottom so nothing ends abruptly. Cli
 any line to jump to it. A blank cue is an instrumental gap and shows as three dots
 rather than leaving a lyric stuck on screen.
 
-Transport is a play button and a progress bar, with no clock. A running timer pulls
-the eye away from the words, and the wheel already shows where you are in the song.
-Drag the bar to scrub.
+Transport is a play button, the elapsed and total time either side of the progress
+bar, and a volume control. Drag the bar to scrub. Click the speaker to mute, drag
+the small bar to set the level, or scroll over it to nudge it.
 
-It is the fastest way to judge timing, because a drift of half a second is obvious
-by ear and invisible in a text file. If lines run consistently early or late, adjust
-`timing_scale` on Lyrics to LRC, or shift everything with `offset_seconds`.
+Two tabs sit above the frame. **Lyrics** is the wheel. **Visualizer** swaps it for
+one of four styles, with the current line kept as a caption underneath. Click the
+style button beside the tabs to switch:
+
+| Style | What it does |
+|-------|--------------|
+| Ring | A spectrum ring around a core that swells on the kick, a waveform traced inside the core, and sparks thrown off on hard beats. |
+| Bars | The classic spectrum: 72 bars with a reflection under the baseline and a floor glow that flares on the kick. |
+| Tunnel | Hexagons warped by the spectrum drift out of a moving vanishing point; every kick fires a bright ring, surges the speed and jolts the camera. |
+| Warp | A starfield that cruises between beats and punches into hyperspace on every kick, each star flickering with its own band of the mix. |
+
+Every style listens the same way: each band is measured against its own recent
+level, so hits jump out even in a loud, compressed master, and a kick detector
+watches the lowest bands for sharp rises.
+
+The node remembers the tab, style and volume when the workflow is saved.
+
+When the LRC was timed by WhisperX, the current line fills word by word as it is
+sung, karaoke style, in the wheel and in the Visualizer caption alike. Lyrics to LRC
+writes those word times as enhanced LRC, a `<mm:ss.xx>` tag before each word:
+
+```
+[00:12.40]<00:12.40>Hold <00:12.86>the <00:13.10>line<00:14.02>
+```
+
+Players that understand enhanced LRC get the karaoke fill too. For one that shows
+the tags as text, turn off `word_timing`. Lines timed without WhisperX stay plain
+and light up whole.
+
+**Export** renders a 720p lyric video in the selected style: the visualizer (Tunnel
+and Warp fill the whole frame), the song title, the current line with its karaoke
+fill and the next line under it, a progress bar with a playhead, and the elapsed and
+total time. It renders offline, faster than real time (a three minute song takes
+seconds, not three minutes), and never touches playback, so the song can keep
+playing. The button shows Rendering, Uploading and Encoding in turn; clicking it
+while it renders cancels.
+
+The browser draws each frame and compresses it with WebCodecs. ComfyUI then adds
+the song's own audio and writes an H.264 + AAC MP4 to
+`output/video/SongLRC/<title>_00001.mp4`, which downloads when it is done.
+
+Browsers without WebCodecs fall back to recording in real time: the song plays
+once from the top, and clicking Export again stops early and keeps what was
+recorded.
+
+It is also the fastest way to judge timing, because a drift of half a second is
+obvious by ear and invisible in a text file. If lines run consistently early or late,
+adjust `timing_scale` on Lyrics to LRC, or shift everything with `offset_seconds`.
 
 The two savers do different jobs, and you normally want one of them, not both.
 **Save Matching LRC** waits for Save Audio (Advanced) and reuses that file's exact
