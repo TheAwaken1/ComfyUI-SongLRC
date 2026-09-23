@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-songlrc"
 description = "Timed .lrc lyrics for generated songs, saved beside the audio, with a player that highlights each line as it is sung."
-version = "1.0.2"
+version = "1.1.0"
 license = { file = "LICENSE" }
 readme = "README.md"
 requires-python = ">=3.10"
