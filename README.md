@@ -134,7 +134,7 @@ body, so a SongLRC chain is recognisable at a glance among other node packs.
 
 ## Using it
 
-![The SongLRC nodes wired together](images/songlrc-nodes.png)
+![The SongLRC nodes wired together, with the player on the Lyrics tab](images/any-audio-to-lrc.png)
 
 Two examples ship with the pack.
 
