@@ -136,7 +136,7 @@ body, so a SongLRC chain is recognisable at a glance among other node packs.
 
 ![The SongLRC nodes wired together, with the player on the Lyrics tab](images/any-audio-to-lrc.png)
 
-Two examples ship with the pack.
+Six examples ship with the pack.
 
 **`example_workflows/any_audio_to_lrc.json`** uses only this pack plus ComfyUI's own
 audio nodes. Point it at any song file, paste that song's lyrics, and it times them,
@@ -164,6 +164,22 @@ own YuE2 nodes, so it needs no song node pack at all. The generated ABC score fe
 the LRC timing here too, so sections land where the music puts them. It is a straight line from lyrics to
 a finished song with a matching LRC, using only this pack, FL-YuE2 and ComfyUI's own
 audio nodes.
+
+**`example_workflows/minimax_music3_song_to_lrc_qwen3.json`** does the same with
+ComfyUI's own MiniMax Music 3 nodes and nothing else to install: Qwen3-VL writes the
+lyrics, Lyrics Clean feeds them to both MiniMax Music 3 and Lyrics to LRC, and the
+finished song is timed, saved with a matching LRC and played back. Put your song idea
+in the Generate Text prompt and the style in the caption on the MiniMax Music 3 Text
+Encode node. It is set to allow up to four minutes; the model ends the song when the
+lyrics run out. The models it needs are listed in the note inside the workflow.
+
+**`example_workflows/ace_step1_5_song_to_lrc_qwen3.json`** is the same idea on
+ComfyUI's own ACE-Step 1.5 XL nodes. Qwen3-VL writes the lyrics, Lyrics Clean feeds
+them to ACE-Step and to Lyrics to LRC, and the song is timed, saved with a matching
+LRC and played back. Put the style in the tags on the ACE-Step text encoder. Unlike
+MiniMax Music 3, ACE-Step always renders exactly the Song Duration you set, so keep it
+long enough for the lyrics (it ships at 180 seconds for a verse, chorus and bridge
+song). ComfyUI offers to download the ACE-Step models when they are missing.
 
 Note that FL-YuE2 names the render length `max_duration`, which is what the example
 uses. If you run a fork that renamed it, set the length on the Render node once after

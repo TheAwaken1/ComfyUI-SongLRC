@@ -668,7 +668,8 @@ Hold the line tonight"""
         """Two savers in one graph means two files with different names."""
         folder = NODE_PATH.parent / "example_workflows"
         for name in ("yue2_song_to_lrc.json", "comfy_yue2_song_to_lrc.json",
-                     "yue2_song_to_lrc_qwen3.json"):
+                     "yue2_song_to_lrc_qwen3.json", "minimax_music3_song_to_lrc_qwen3.json",
+                     "ace_step1_5_song_to_lrc_qwen3.json"):
             with self.subTest(workflow=name):
                 graph = json.loads((folder / name).read_text(encoding="utf-8"))
                 savers = [n["type"] for n in graph["nodes"]
@@ -711,6 +712,63 @@ Hold the line tonight"""
         self.assertEqual(by_id[source[1]]["type"], "TextGenerate",
                          "the generator connects straight into Lyrics Clean")
 
+    _CORE_NODES = {
+        "UNETLoader", "CLIPLoader", "DualCLIPLoader", "VAELoader", "KSampler",
+        "ConditioningZeroOut", "ModelSamplingAuraFlow", "EmptyMiniMaxMusic3LatentAudio",
+        "MiniMaxMusic3TextEncode", "EmptyAceStep1.5LatentAudio", "TextEncodeAceStepAudio1.5",
+        "VAEDecodeAudio", "VAEDecodeAudioTiled", "ComfySwitchNode", "SaveAudioAdvanced",
+        "SeedNode", "PrimitiveNode", "PrimitiveInt", "TextGenerate", "MarkdownNote",
+    }
+
+    def _check_qwen_song_example(self, name, song_model, timed_audio_from):
+        """Qwen writes the lyrics, the song model sings them, SongLRC times them."""
+        path = NODE_PATH.parent / "example_workflows" / name
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        by_id = {n["id"]: n for n in graph["nodes"]}
+        links = {l[0]: l for l in graph["links"]}
+
+        # Every link agrees with both of its ends.
+        for lid, src, src_slot, dst, dst_slot, _type in graph["links"]:
+            self.assertIn(lid, by_id[src]["outputs"][src_slot]["links"])
+            self.assertEqual(by_id[dst]["inputs"][dst_slot]["link"], lid)
+
+        for item in graph["nodes"]:
+            with self.subTest(node=item["type"]):
+                self.assertTrue(item["type"] in self._CORE_NODES
+                                or item["type"] in node.NODE_CLASS_MAPPINGS,
+                                "examples should need only ComfyUI and this pack")
+            if item["type"] in ("UNETLoader", "CLIPLoader", "DualCLIPLoader", "VAELoader"):
+                for value in item["widgets_values"]:
+                    self.assertNotIn("\\", str(value), "no personal model subfolders")
+
+        def targets(item, slot=0):
+            return {by_id[links[i][3]]["type"] for i in item["outputs"][slot]["links"]}
+
+        clean = next(n for n in graph["nodes"] if n["type"] == "SongLyricsClean")
+        self.assertEqual(by_id[links[clean["inputs"][0]["link"]][1]]["type"], "TextGenerate")
+        self.assertEqual(targets(clean), {song_model, "SongLyricsToLRC"})
+        timing = next(n for n in graph["nodes"] if n["type"] == "SongLyricsToLRC")
+        audio = next(i for i in timing["inputs"] if i["name"] == "audio")
+        self.assertEqual(by_id[links[audio["link"]][1]]["type"], timed_audio_from,
+                         "timing listens to the finished song")
+        return graph
+
+    def test_minimax_music3_example_sings_and_times_the_same_words(self):
+        graph = self._check_qwen_song_example("minimax_music3_song_to_lrc_qwen3.json",
+                                              "MiniMaxMusic3TextEncode", "ComfySwitchNode")
+        encoder = next(n for n in graph["nodes"] if n["type"] == "MiniMaxMusic3TextEncode")
+        self.assertTrue(encoder["widgets_values"][0].strip(), "the example ships a caption")
+        self.assertGreaterEqual(encoder["widgets_values"][4], 180, "room for a full song")
+
+    def test_ace_step_example_sings_and_times_the_same_words(self):
+        graph = self._check_qwen_song_example("ace_step1_5_song_to_lrc_qwen3.json",
+                                              "TextEncodeAceStepAudio1.5", "VAEDecodeAudio")
+        duration = next(n for n in graph["nodes"] if n.get("title") == "Song Duration")
+        self.assertGreaterEqual(duration["widgets_values"][0], 180,
+                                "ACE-Step renders exactly this long, so a full song needs room")
+        for item in graph["nodes"]:
+            if item["type"] in ("UNETLoader", "DualCLIPLoader", "VAELoader"):
+                self.assertTrue(item["properties"].get("models"), "ComfyUI can fetch the model")
 
 if __name__ == "__main__":
     unittest.main()

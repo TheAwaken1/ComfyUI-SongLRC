@@ -1,0 +1,1974 @@
+{
+  "id": "88ac5dad-efd7-40bb-84fe-fbaefdee1fa9",
+  "revision": 0,
+  "last_node_id": 117,
+  "last_link_id": 279,
+  "nodes": [
+    {
+      "id": 99,
+      "type": "PrimitiveNode",
+      "pos": [
+        -140,
+        -290
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "widget": {
+            "name": "seconds"
+          },
+          "links": [
+            250,
+            251
+          ]
+        }
+      ],
+      "title": "Song Duration",
+      "properties": {
+        "Run widget replace on values": false
+      },
+      "widgets_values": [
+        180,
+        "fixed"
+      ],
+      "widgets_values_named": {
+        "value": 120,
+        "control_after_generate": "fixed"
+      }
+    },
+    {
+      "id": 98,
+      "type": "EmptyAceStep1.5LatentAudio",
+      "pos": [
+        280,
+        -40
+      ],
+      "size": [
+        254.90390625,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "seconds",
+          "name": "seconds",
+          "type": "FLOAT",
+          "widget": {
+            "name": "seconds"
+          },
+          "link": 250
+        },
+        {
+          "localized_name": "batch_size",
+          "name": "batch_size",
+          "type": "INT",
+          "widget": {
+            "name": "batch_size"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            249
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.11.1",
+        "Node name for S&R": "EmptyAceStep1.5LatentAudio",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        120,
+        1
+      ],
+      "widgets_values_named": {
+        "seconds": 120,
+        "batch_size": 1
+      }
+    },
+    {
+      "id": 47,
+      "type": "ConditioningZeroOut",
+      "pos": [
+        650,
+        -50
+      ],
+      "size": [
+        230,
+        58
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "conditioning",
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 255
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "CONDITIONING",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            119
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.11.1",
+        "Node name for S&R": "ConditioningZeroOut",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      }
+    },
+    {
+      "id": 109,
+      "type": "PrimitiveInt",
+      "pos": [
+        -140,
+        -110
+      ],
+      "size": [
+        270,
+        90
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "value",
+          "name": "value",
+          "type": "INT",
+          "widget": {
+            "name": "value"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "INT",
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            264,
+            265
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.18.2",
+        "Node name for S&R": "PrimitiveInt",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        0,
+        "fixed"
+      ],
+      "widgets_values_named": {
+        "value": 0,
+        "fixed": "fixed"
+      }
+    },
+    {
+      "id": 3,
+      "type": "KSampler",
+      "pos": [
+        940,
+        -750
+      ],
+      "size": [
+        330,
+        320
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 175
+        },
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 254
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 119
+        },
+        {
+          "localized_name": "latent_image",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 249
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": 265
+        },
+        {
+          "localized_name": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sampler_name",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "scheduler",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "denoise",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            256
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.11.1",
+        "Node name for S&R": "KSampler",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        0,
+        "fixed",
+        50,
+        7,
+        "euler",
+        "simple",
+        1
+      ],
+      "widgets_values_named": {
+        "seed": 0,
+        "control_after_generate": "fixed",
+        "steps": 50,
+        "cfg": 7,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "denoise": 1
+      }
+    },
+    {
+      "id": 18,
+      "type": "VAEDecodeAudio",
+      "pos": [
+        1290,
+        -870
+      ],
+      "size": [
+        230,
+        78
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "samples",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 256
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 262
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "AUDIO",
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            266,
+            272,
+            278
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.11.1",
+        "Node name for S&R": "VAEDecodeAudio",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      }
+    },
+    {
+      "id": 78,
+      "type": "ModelSamplingAuraFlow",
+      "pos": [
+        940,
+        -880
+      ],
+      "size": [
+        330,
+        86
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 260
+        },
+        {
+          "localized_name": "shift",
+          "name": "shift",
+          "type": "FLOAT",
+          "widget": {
+            "name": "shift"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sampling",
+          "name": "sampling",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "sampling"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            175
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.11.1",
+        "Node name for S&R": "ModelSamplingAuraFlow",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        3,
+        "flow"
+      ],
+      "widgets_values_named": {
+        "shift": 3,
+        "sampling": "flow"
+      }
+    },
+    {
+      "id": 104,
+      "type": "UNETLoader",
+      "pos": [
+        -190,
+        -880
+      ],
+      "size": [
+        380,
+        110
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "unet_name",
+          "name": "unet_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "weight_dtype",
+          "name": "weight_dtype",
+          "type": "COMBO",
+          "widget": {
+            "name": "weight_dtype"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            260
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.11.1",
+        "Node name for S&R": "UNETLoader",
+        "models": [
+          {
+            "name": "acestep_v1.5_xl_sft_bf16.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/ace_step_1.5_ComfyUI_files/resolve/main/split_files/diffusion_models/acestep_v1.5_xl_sft_bf16.safetensors",
+            "directory": "diffusion_models"
+          }
+        ],
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        "acestep_v1.5_xl_sft_bf16.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "ace-step1.5\\acestep_v1.5_xl_sft_bf16.safetensors",
+        "weight_dtype": "default"
+      }
+    },
+    {
+      "id": 105,
+      "type": "DualCLIPLoader",
+      "pos": [
+        -190,
+        -720
+      ],
+      "size": [
+        380,
+        166
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip_name1",
+          "name": "clip_name1",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name1"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "clip_name2",
+          "name": "clip_name2",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name2"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "type",
+          "name": "type",
+          "type": "COMBO",
+          "widget": {
+            "name": "type"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "device",
+          "name": "device",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "device"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "CLIP",
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            261
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.11.1",
+        "Node name for S&R": "DualCLIPLoader",
+        "models": [
+          {
+            "name": "qwen_0.6b_ace15.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/ace_step_1.5_ComfyUI_files/resolve/main/split_files/text_encoders/qwen_0.6b_ace15.safetensors",
+            "directory": "text_encoders"
+          },
+          {
+            "name": "qwen_4b_ace15.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/ace_step_1.5_ComfyUI_files/resolve/main/split_files/text_encoders/qwen_4b_ace15.safetensors",
+            "directory": "text_encoders"
+          }
+        ],
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        "qwen_0.6b_ace15.safetensors",
+        "qwen_4b_ace15.safetensors",
+        "ace",
+        "default"
+      ],
+      "widgets_values_named": {
+        "clip_name1": "ace-step1.5\\qwen_0.6b_ace15.safetensors",
+        "clip_name2": "ace-step1.5\\qwen_4b_ace15.safetensors",
+        "type": "ace",
+        "device": "default"
+      }
+    },
+    {
+      "id": 106,
+      "type": "VAELoader",
+      "pos": [
+        -190,
+        -490
+      ],
+      "size": [
+        380,
+        110
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "vae_name",
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            262
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.11.1",
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "ace_1.5_vae.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/ace_step_1.5_ComfyUI_files/resolve/main/split_files/vae/ace_1.5_vae.safetensors",
+            "directory": "vae"
+          }
+        ],
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        "ace_1.5_vae.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "ace-step1.5\\ace_1.5_vae.safetensors"
+      }
+    },
+    {
+      "id": 94,
+      "type": "TextEncodeAceStepAudio1.5",
+      "pos": [
+        270,
+        -880
+      ],
+      "size": [
+        615.8675799086757,
+        774.0125570776256
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "showAdvanced": true,
+      "inputs": [
+        {
+          "localized_name": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 261
+        },
+        {
+          "localized_name": "tags",
+          "name": "tags",
+          "type": "STRING",
+          "widget": {
+            "name": "tags"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "widget": {
+            "name": "lyrics"
+          },
+          "link": 269
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": 264
+        },
+        {
+          "localized_name": "bpm",
+          "name": "bpm",
+          "type": "INT",
+          "widget": {
+            "name": "bpm"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "duration",
+          "name": "duration",
+          "type": "FLOAT",
+          "widget": {
+            "name": "duration"
+          },
+          "link": 251
+        },
+        {
+          "localized_name": "timesignature",
+          "name": "timesignature",
+          "type": "COMBO",
+          "widget": {
+            "name": "timesignature"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "language",
+          "name": "language",
+          "type": "COMBO",
+          "widget": {
+            "name": "language"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "keyscale",
+          "name": "keyscale",
+          "type": "COMBO",
+          "widget": {
+            "name": "keyscale"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "generate_audio_codes",
+          "name": "generate_audio_codes",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "generate_audio_codes"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cfg_scale",
+          "name": "cfg_scale",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg_scale"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "temperature",
+          "name": "temperature",
+          "type": "FLOAT",
+          "widget": {
+            "name": "temperature"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_p",
+          "name": "top_p",
+          "type": "FLOAT",
+          "widget": {
+            "name": "top_p"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_k",
+          "name": "top_k",
+          "type": "INT",
+          "widget": {
+            "name": "top_k"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "min_p",
+          "name": "min_p",
+          "type": "FLOAT",
+          "widget": {
+            "name": "min_p"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "CONDITIONING",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            254,
+            255
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.11.1",
+        "Node name for S&R": "TextEncodeAceStepAudio1.5",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        "English, male voice, R&B, Brian McKnight, Motown, R&B, high notes, emotional, smooth baritone to falsetto, stacked harmonies, piano, warm bass, 74 BPM ballad",
+        "",
+        0,
+        "fixed",
+        120,
+        120,
+        "4",
+        "en",
+        "E minor",
+        true,
+        2,
+        0.85,
+        1,
+        0,
+        0
+      ],
+      "widgets_values_named": {
+        "tags": "English, male voice, R&B, Brian McKnight, Motown, R&B, high notes, emotional, smooth baritone to falsetto, stacked harmonies, piano, warm bass, 74 BPM ballad",
+        "lyrics": "[Verse 1]\n\nI been driving with the radio off\n\nTrying not to hear what I already know\n\nYour perfume still lives in the passenger seat\n\nLike it never got the word to go\n\nI can talk that tough all evening\n\nI can act like I don’t break\n\nBut the second that you cross my mind\n\nI’m a man on his knees again\n[Pre-Chorus]\n\nI don’t need a speech\n\nI don’t need a why\n\nI just need you to walk back through that door\n\nBefore I lose my mind\n[Chorus]\n\nLeave the light on for me, baby\n\nI don’t care how late I get\n\nI been too proud for too long\n\nAnd I’m paying for it yet\n\nIf you still want a bad man\n\nI can be that in the dark\n\nBut when the night gets honest\n\nYou still got my heart\n\nLeave the light\n\nLeave the light on\n[Verse 2]\n\nI know I came home empty\n\nHands full of almost and not enough\n\nYou wanted a man who would stay in the room\n\nNot a ghost that you had to love\n\nI can hit every high note for a crowd\n\nMake the whole place say my name\n\nBut the only voice I’m chasing\n\nIs the one that used to stay\n[Pre-Chorus]\n\nI don’t need a speech\n\nI don’t need a why\n\nI just need you to walk back through that door\n\nBefore I lose my mind\n[Chorus]\n\nLeave the light on for me, baby\n\nI don’t care how late I get\n\nI been too proud for too long\n\nAnd I’m paying for it yet\n\nIf you still want a bad man\n\nI can be that in the dark\n\nBut when the night gets honest\n\nYou still got my heart\n\nLeave the light\n\nLeave the light on\n[Bridge]\n\nTell me I’m wrong\n\nTell me I’m late\n\nTell me you changed the locks and changed your name\n\nI’ll still be outside\n\nEngine running\n\nPraying that hallway still knows my face\n[Final Chorus]\n\nLeave the light on for me, baby\n\nI don’t care how late I get\n\nI been too proud for too long\n\nTo pretend I don’t need you yet\n\nIf the morning comes without you\n\nI’ll live with what I done\n\nBut tonight I’m still that man\n\nAsking you to leave the light on",
+        "seed": 0,
+        "control_after_generate": "fixed",
+        "bpm": 120,
+        "duration": 120,
+        "timesignature": "4",
+        "language": "en",
+        "keyscale": "E minor",
+        "generate_audio_codes": true,
+        "cfg_scale": 2,
+        "temperature": 0.85,
+        "top_p": 1,
+        "top_k": 0,
+        "min_p": 0
+      }
+    },
+    {
+      "id": 110,
+      "type": "SaveAudioAdvanced",
+      "pos": [
+        1290,
+        -740
+      ],
+      "size": [
+        310,
+        160
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 266
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": 274
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "quality",
+          "name": "format.quality",
+          "type": "COMBO",
+          "widget": {
+            "name": "format.quality"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audioUI",
+          "name": "audioUI",
+          "type": "AUDIO_UI",
+          "widget": {
+            "name": "audioUI"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            275
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.2"
+      },
+      "widgets_values": [
+        "audio/ComfyUI",
+        "mp3",
+        "V0"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "audio/ComfyUI",
+        "format": "mp3",
+        "format.quality": "V0"
+      }
+    },
+    {
+      "id": 111,
+      "type": "CLIPLoader",
+      "pos": [
+        -640,
+        -880
+      ],
+      "size": [
+        380,
+        106
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip_name",
+          "name": "clip_name",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "clip_name"
+          }
+        },
+        {
+          "localized_name": "type",
+          "name": "type",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "type"
+          }
+        },
+        {
+          "localized_name": "device",
+          "name": "device",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "device"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "CLIP",
+          "name": "CLIP",
+          "type": "CLIP",
+          "slot_index": 0,
+          "links": [
+            267
+          ]
+        }
+      ],
+      "widgets_values": [
+        "qwen3vl_4b_bf16.safetensors",
+        "stable_diffusion",
+        "default"
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values_named": {
+        "clip_name": "qwen3vl_4b_bf16.safetensors",
+        "type": "stable_diffusion",
+        "device": "default"
+      }
+    },
+    {
+      "id": 112,
+      "type": "TextGenerate",
+      "pos": [
+        -640,
+        -740
+      ],
+      "size": [
+        380,
+        470
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 267
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "video",
+          "name": "video",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "localized_name": "system_prompt",
+          "name": "system_prompt",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_length",
+          "name": "max_length",
+          "type": "INT",
+          "widget": {
+            "name": "max_length"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "Sampling Mode",
+          "name": "sampling_mode",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "sampling_mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "temperature",
+          "name": "sampling_mode.temperature",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sampling_mode.temperature"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_k",
+          "name": "sampling_mode.top_k",
+          "type": "INT",
+          "widget": {
+            "name": "sampling_mode.top_k"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "top_p",
+          "name": "sampling_mode.top_p",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sampling_mode.top_p"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "min_p",
+          "name": "sampling_mode.min_p",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sampling_mode.min_p"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "repetition_penalty",
+          "name": "sampling_mode.repetition_penalty",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sampling_mode.repetition_penalty"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "sampling_mode.seed",
+          "type": "INT",
+          "widget": {
+            "name": "sampling_mode.seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "presence_penalty",
+          "name": "sampling_mode.presence_penalty",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "sampling_mode.presence_penalty"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "thinking",
+          "name": "thinking",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "thinking"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "use_default_template",
+          "name": "use_default_template",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "use_default_template"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "mtp",
+          "name": "mtp",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "mtp"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "generated_text",
+          "name": "generated_text",
+          "type": "STRING",
+          "links": [
+            268
+          ]
+        },
+        {
+          "localized_name": "thinking",
+          "name": "thinking",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.2",
+        "Node name for S&R": "TextGenerate"
+      },
+      "widgets_values": [
+        "Write song lyrics only. No title, no subtitle, no markdown, no commentary. Use these section tags on their own lines, in this order: [verse] [chorus] [verse] [chorus] [bridge] [chorus] [outro]. Each verse 8 lines, each chorus 4 lines. Song about a man driving at night with the radio off, unable to stop thinking about the woman who left",
+        512,
+        "on",
+        0.7,
+        64,
+        0.95,
+        0.05,
+        1.05,
+        0,
+        0,
+        false,
+        true,
+        "auto"
+      ],
+      "widgets_values_named": {
+        "prompt": "Write YuE2 song lyrics only. No title, no subtitle, no markdown, no commentary. Use exactly these section tags on their own lines: [verse] [chorus] [bridge] [outro]. Two verses and two choruses. Song about a shih tzu with sunglasses who likes to dance",
+        "max_length": 512,
+        "sampling_mode": "on",
+        "sampling_mode.temperature": 0.7,
+        "sampling_mode.top_k": 64,
+        "sampling_mode.top_p": 0.95,
+        "sampling_mode.min_p": 0.05,
+        "sampling_mode.repetition_penalty": 1.05,
+        "sampling_mode.seed": 0,
+        "sampling_mode.presence_penalty": 0,
+        "thinking": false,
+        "use_default_template": true,
+        "mtp": "auto"
+      },
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 113,
+      "type": "SongLyricsClean",
+      "pos": [
+        -640,
+        -230
+      ],
+      "size": [
+        380,
+        90
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "text",
+          "name": "text",
+          "type": "STRING",
+          "link": 268,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            269,
+            270
+          ]
+        },
+        {
+          "localized_name": "title",
+          "name": "title",
+          "type": "STRING",
+          "slot_index": 1,
+          "links": [
+            271
+          ]
+        }
+      ],
+      "widgets_values": [
+        ""
+      ],
+      "properties": {
+        "Node name for S&R": "SongLyricsClean"
+      },
+      "widgets_values_named": {
+        "text": ""
+      },
+      "title": "1. Lyrics from Qwen",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 114,
+      "type": "SongFilename",
+      "pos": [
+        -640,
+        -110
+      ],
+      "size": [
+        380,
+        110
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "title",
+          "name": "title",
+          "type": "STRING",
+          "link": 271,
+          "widget": {
+            "name": "title"
+          }
+        },
+        {
+          "localized_name": "folder",
+          "name": "folder",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "folder"
+          }
+        },
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            274,
+            277
+          ]
+        },
+        {
+          "localized_name": "safe_title",
+          "name": "safe_title",
+          "type": "STRING",
+          "slot_index": 1,
+          "links": [
+            273
+          ]
+        }
+      ],
+      "widgets_values": [
+        "",
+        "audio/songs"
+      ],
+      "properties": {
+        "Node name for S&R": "SongFilename"
+      },
+      "widgets_values_named": {
+        "title": "",
+        "folder": "audio/songs"
+      },
+      "title": "2. Name the files",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 115,
+      "type": "SongLyricsToLRC",
+      "pos": [
+        940,
+        -380
+      ],
+      "size": [
+        330,
+        360
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "lyrics",
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 270,
+          "widget": {
+            "name": "lyrics"
+          }
+        },
+        {
+          "localized_name": "seconds",
+          "name": "seconds",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "seconds"
+          }
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 272,
+          "shape": 7
+        },
+        {
+          "localized_name": "structure",
+          "name": "structure",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "structure"
+          }
+        },
+        {
+          "localized_name": "title",
+          "name": "title",
+          "type": "STRING",
+          "link": 273,
+          "widget": {
+            "name": "title"
+          }
+        },
+        {
+          "localized_name": "artist",
+          "name": "artist",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "artist"
+          }
+        },
+        {
+          "localized_name": "language",
+          "name": "language",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "language"
+          }
+        },
+        {
+          "localized_name": "offset_seconds",
+          "name": "offset_seconds",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "offset_seconds"
+          }
+        },
+        {
+          "localized_name": "timing_scale",
+          "name": "timing_scale",
+          "type": "FLOAT",
+          "link": null,
+          "widget": {
+            "name": "timing_scale"
+          }
+        },
+        {
+          "localized_name": "prefer_alignment",
+          "name": "prefer_alignment",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "prefer_alignment"
+          }
+        },
+        {
+          "localized_name": "word_timing",
+          "name": "word_timing",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "word_timing"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            276,
+            279
+          ]
+        }
+      ],
+      "widgets_values": [
+        "",
+        0,
+        "",
+        "",
+        "",
+        "en",
+        0,
+        1,
+        true,
+        true
+      ],
+      "properties": {
+        "Node name for S&R": "SongLyricsToLRC"
+      },
+      "widgets_values_named": {
+        "lyrics": "",
+        "seconds": 0,
+        "structure": "",
+        "title": "",
+        "artist": "",
+        "language": "en",
+        "offset_seconds": 0,
+        "timing_scale": 1,
+        "prefer_alignment": true,
+        "word_timing": true
+      },
+      "title": "3. Time the lyrics",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 116,
+      "type": "SongSaveMatchingLRC",
+      "pos": [
+        1290,
+        -560
+      ],
+      "size": [
+        310,
+        150
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 275
+        },
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "link": 276
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "link": 277
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": []
+        }
+      ],
+      "widgets_values": [],
+      "properties": {
+        "Node name for S&R": "SongSaveMatchingLRC"
+      },
+      "widgets_values_named": {},
+      "title": "4. LRC beside the audio",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    },
+    {
+      "id": 117,
+      "type": "SongMusicPlayer",
+      "pos": [
+        1290,
+        -380
+      ],
+      "size": [
+        620,
+        400
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 278
+        },
+        {
+          "localized_name": "lrc",
+          "name": "lrc",
+          "type": "STRING",
+          "link": 279
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": []
+        }
+      ],
+      "widgets_values": [],
+      "properties": {
+        "Node name for S&R": "SongMusicPlayer",
+        "songLrcView": "lyrics",
+        "songLrcStyle": "ring",
+        "songLrcVolume": 1
+      },
+      "widgets_values_named": {},
+      "title": "5. Listen with the lyrics",
+      "color": "#8a3d14",
+      "bgcolor": "#4a161c"
+    }
+  ],
+  "links": [
+    [
+      119,
+      47,
+      0,
+      3,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      175,
+      78,
+      0,
+      3,
+      0,
+      "MODEL"
+    ],
+    [
+      249,
+      98,
+      0,
+      3,
+      3,
+      "LATENT"
+    ],
+    [
+      250,
+      99,
+      0,
+      98,
+      0,
+      "FLOAT"
+    ],
+    [
+      251,
+      99,
+      0,
+      94,
+      5,
+      "FLOAT"
+    ],
+    [
+      254,
+      94,
+      0,
+      3,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      255,
+      94,
+      0,
+      47,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      256,
+      3,
+      0,
+      18,
+      0,
+      "LATENT"
+    ],
+    [
+      260,
+      104,
+      0,
+      78,
+      0,
+      "MODEL"
+    ],
+    [
+      261,
+      105,
+      0,
+      94,
+      0,
+      "CLIP"
+    ],
+    [
+      262,
+      106,
+      0,
+      18,
+      1,
+      "VAE"
+    ],
+    [
+      264,
+      109,
+      0,
+      94,
+      3,
+      "INT"
+    ],
+    [
+      265,
+      109,
+      0,
+      3,
+      4,
+      "INT"
+    ],
+    [
+      266,
+      18,
+      0,
+      110,
+      0,
+      "AUDIO"
+    ],
+    [
+      267,
+      111,
+      0,
+      112,
+      0,
+      "CLIP"
+    ],
+    [
+      268,
+      112,
+      0,
+      113,
+      0,
+      "STRING"
+    ],
+    [
+      269,
+      113,
+      0,
+      94,
+      2,
+      "STRING"
+    ],
+    [
+      270,
+      113,
+      0,
+      115,
+      0,
+      "STRING"
+    ],
+    [
+      271,
+      113,
+      1,
+      114,
+      0,
+      "STRING"
+    ],
+    [
+      272,
+      18,
+      0,
+      115,
+      2,
+      "AUDIO"
+    ],
+    [
+      273,
+      114,
+      1,
+      115,
+      4,
+      "STRING"
+    ],
+    [
+      274,
+      114,
+      0,
+      110,
+      1,
+      "STRING"
+    ],
+    [
+      275,
+      110,
+      0,
+      116,
+      0,
+      "AUDIO"
+    ],
+    [
+      276,
+      115,
+      0,
+      116,
+      1,
+      "STRING"
+    ],
+    [
+      277,
+      114,
+      0,
+      116,
+      2,
+      "STRING"
+    ],
+    [
+      278,
+      18,
+      0,
+      117,
+      0,
+      "AUDIO"
+    ],
+    [
+      279,
+      115,
+      0,
+      117,
+      1,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Model",
+      "bounding": [
+        -210,
+        -950,
+        447.22598026477124,
+        574.6629131689834
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "Duration",
+      "bounding": [
+        -210,
+        -350,
+        450,
+        170
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "Prompt",
+      "bounding": [
+        260,
+        -950,
+        640,
+        960
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "Lyrics (Qwen3-VL) and file names",
+      "bounding": [
+        -660,
+        -950,
+        420,
+        860
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.7999634719875804,
+      "offset": [
+        684.2473173515987,
+        1296.4828196347023
+      ]
+    },
+    "frontendVersion": "1.51.9",
+    "workflowRendererVersion": "LG",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
